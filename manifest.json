@@ -1,12 +1,12 @@
 {
     "name": "Marmoset Stat",
     "description": "A Chrome Extension for displaying Marmoset stats",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "manifest_version": 2,
     "content_scripts": [
         {
           "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/projectTestResults.jsp*"],
-          "js": ["marmoset_stats.js"]
+          "js": ["lib/jquery-3.4.1.min.js", "marmoset_stats.js"]
         }
     ]
 }
