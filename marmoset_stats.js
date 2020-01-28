@@ -56,11 +56,8 @@ function parse_test_result(table, test_ind, col_ind) {
     }
 
     var summary_tag = document.createElement('p');
-    summary_tag.innerText = (total_passed / total_submissions * 100).toFixed(2) + '%';
-    summary_tag.style.fontWeight = 'normal';
-    summary_tag.style.fontSize = '13px';
-    summary_tag.style.marginBlockStart = '0px';
-    summary_tag.style.marginBlockEnd = '0px';
+    summary_tag.className = 'marmoset-stats-inline'
+    summary_tag.innerText = (total_passed / total_submissions * 100).toFixed(1) + '%';
     title_tag.appendChild(summary_tag);
 }
 
@@ -113,11 +110,12 @@ function display_overview() {
 
     if (subject && catalog) {
         var students_tag = document.createElement('div');
-        students_tag.innerHTML = '<ul>\
-        <li>Total Students: <b id="marmoset_stats_total_students"></b></li>\
-        <li>Total Submitted: <b id="marmoset_stats_total_submissions"></b></li>\
-        <li>Submission Rate: <b id="marmoset_stats_submission_rate"></b></li>\
-        </ul>'
+        students_tag.innerHTML =
+        '<ul class="marmoset-stats marmoset-stats-summary">\
+            <li>Total Students: <b id="marmoset_stats_total_students"></b></li>\
+            <li>Total Submitted: <b id="marmoset_stats_total_submissions"></b></li>\
+            <li>Submission Rate: <b id="marmoset_stats_submission_rate"></b></li>\
+        </ul>';
 
         const result_table = document.querySelector('[title="projectTestResults"]');
         result_table.parentElement.prepend(students_tag);

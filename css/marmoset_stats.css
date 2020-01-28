@@ -1,0 +1,14 @@
+ul .marmoset-stats-summary {
+    font-size: 18px;
+}
+
+li {
+    padding: 3px;
+}
+
+.marmoset-stats-inline {
+    font-size: 14px;
+    font-weight: normal;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
