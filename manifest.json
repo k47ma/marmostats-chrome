@@ -1,7 +1,7 @@
 {
-    "name": "Marmoset Stat",
-    "description": "A Chrome Extension for displaying Marmoset stats",
-    "version": "1.0.1",
+    "name": "MarmoStat",
+    "description": "A Chrome Extension for visualizing Marmoset test results",
+    "version": "1.1.0",
     "manifest_version": 2,
     "content_scripts": [
         {
