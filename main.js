@@ -134,7 +134,7 @@ function parse_test_result(table, test_ind, col_ind) {
 
     const passed_ratio = total_passed / total_submissions;
     var summary_tag = document.createElement('p');
-    summary_tag.className = 'marmoset-stats-inline'
+    summary_tag.className = 'marmostats-inline'
     summary_tag.innerText = (passed_ratio * 100).toFixed(1) + '%';
     title_tag.appendChild(summary_tag);
 
