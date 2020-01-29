@@ -1,9 +1,10 @@
 /* Script for parsing test details. */
 
-const key = "97a591e399f591e64a5f4536d08d9574"
+const key = "97a591e399f591e64a5f4536d08d9574";
 
 // update the number of total students and students who have submitted
-function update_total_students(subject, catalog, result_table) {
+function update_total_students(subject, catalog) {
+    var result_table = document.querySelector('[title="projectTestResults"]');
     const termlist_url = "https://api.uwaterloo.ca/v2/terms/list.json?key="+key;
     var total_students = 0;
     var total_submissions = 0;
@@ -17,7 +18,7 @@ function update_total_students(subject, catalog, result_table) {
                         total_students += section_info.enrollment_total;
                     }
                 }
-                $("#marmoset_stats_total_students").html(total_students);
+                $("#marmostats-total-students").html(total_students);
                 update_submission_rate(total_students, total_submissions);
             });
     });
@@ -28,7 +29,7 @@ function update_total_students(subject, catalog, result_table) {
                 ++total_submissions;
         }
     }
-    $("#marmoset_stats_total_submissions").html(total_submissions);
+    $("#marmostats-total-submissions").html(total_submissions);
     update_submission_rate(total_students, total_submissions);
 }
 
@@ -36,8 +37,62 @@ function update_total_students(subject, catalog, result_table) {
 function update_submission_rate(total_students, total_submissions) {
     if (total_students > 0 && total_submissions > 0) {
         const submission_rate = (total_submissions / total_students * 100).toFixed(2);
-        $("#marmoset_stats_submission_rate").html(submission_rate + '%');
+        $("#marmostats-submission-rate").html(submission_rate + '%');
     }
+}
+
+// draw a column chart about the test results under overview
+function draw_chart(test_names, test_results) {
+    var chart_canvas = document.createElement('canvas');
+    document.querySelector('div[id="marmostats-chart"]').appendChild(chart_canvas);
+
+    var ctx = chart_canvas.getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
+    
+        // The data for our dataset
+        data: {
+            labels: test_names,
+            datasets: [{
+                label: 'Pass Rate',
+                backgroundColor: 'rgba(122, 235, 122, 0.85)',
+                borderColor: 'rgba(100, 231, 100, 1.0)',
+                hoverBackgroundColor: 'rgba(100, 231, 100, 1.0)',
+                hoverBorderColor: 'rgba(100, 231, 100, 1.0)',
+                borderWidth: 1,
+                hoverBorderWidth: 2,
+                data: test_results,
+                barPercentage: 0.8
+            }]
+        },
+    
+        // Configuration options go here
+        options: {
+            events: ['mousemove'],
+            scales: {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Test Case'
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: '%'
+                    },
+                    ticks: {
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }]
+            }
+        }
+    });
+
+    chart_canvas.parentNode.style.height = '350px';
+    chart_canvas.parentNode.style.width = '700px';
 }
 
 // Parse the result for a single test case and add the result to title
@@ -55,10 +110,13 @@ function parse_test_result(table, test_ind, col_ind) {
         }
     }
 
+    const passed_ratio = total_passed / total_submissions;
     var summary_tag = document.createElement('p');
     summary_tag.className = 'marmoset-stats-inline'
-    summary_tag.innerText = (total_passed / total_submissions * 100).toFixed(1) + '%';
+    summary_tag.innerText = (passed_ratio * 100).toFixed(1) + '%';
     title_tag.appendChild(summary_tag);
+
+    return (passed_ratio * 100).toFixed(1);
 }
 
 // parse the test result table and add stats
@@ -84,14 +142,23 @@ function parse_result_table(result_table) {
         }
     }
 
+    var test_names = new Array();
+    var test_results = new Array();
+
     for (i = 0; i < total_public_tests; ++i) {
-        parse_test_result(result_table, i, public_index + i);
+        const passed_ratio = parse_test_result(result_table, i, public_index + i);
+        test_names.push('P' + i.toString());
+        test_results.push(passed_ratio);
     }
 
     for (i = 0; i < total_secret_tests; ++i) {
-        parse_test_result(result_table, i + total_public_tests,
-                          public_index + total_public_tests + i);
+        const passed_ratio = parse_test_result(result_table, i + total_public_tests,
+                                               public_index + total_public_tests + i);
+        test_names.push('S' + i.toString());
+        test_results.push(passed_ratio);
     }
+
+    draw_chart(test_names, test_results);
 }
 
 // display an overview above the result table
@@ -109,24 +176,24 @@ function display_overview() {
     }
 
     if (subject && catalog) {
-        var students_tag = document.createElement('div');
-        students_tag.innerHTML =
-        '<ul class="marmoset-stats marmoset-stats-summary">\
-            <li>Total Students: <b id="marmoset_stats_total_students"></b></li>\
-            <li>Total Submitted: <b id="marmoset_stats_total_submissions"></b></li>\
-            <li>Submission Rate: <b id="marmoset_stats_submission_rate"></b></li>\
-        </ul>';
+        var list_tag = document.createElement('ul');
+        list_tag.className = "marmostats-list";
+        list_tag.innerHTML = '<li>Total Students: <b id="marmostats-total-students"></b></li>\
+                              <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
+                              <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>';
+        document.querySelector('div[id="marmostats-test-summary"]').appendChild(list_tag);
 
-        const result_table = document.querySelector('[title="projectTestResults"]');
-        result_table.parentElement.prepend(students_tag);
-
-        update_total_students(subject, catalog, result_table);
+        update_total_students(subject, catalog);
     }
 }
 
 // display stats for all test cases
 function display_stats() {
     var result_table = document.querySelector('[title="projectTestResults"]');
+    var overview_tag = document.createElement('div');
+    overview_tag.id = 'marmostats-overview';
+    overview_tag.innerHTML = '<div id="marmostats-test-summary"></div><div id="marmostats-chart"></div>';
+    result_table.parentElement.prepend(overview_tag);
 
     if (result_table != undefined) {
         parse_result_table(result_table);
