@@ -127,10 +127,12 @@ function parse_result_table(result_table) {
     var titles = rows[0].getElementsByTagName('th');
     var public_index = -1;
     var secret_index = -1;
+    var score_index = -1;
     var total_public_tests = 0;
     var total_secret_tests = 0;
 
     for (i = 0; i < total_cols; ++i) {
+        const children_tags = titles[i].children;
         if (public_index == -1 && titles[i].textContent == "Public") {
             public_index = i;
             total_public_tests = Number(titles[i].getAttribute('colspan'));
@@ -140,8 +142,22 @@ function parse_result_table(result_table) {
             secret_index = i;
             total_secret_tests = Number(titles[i].getAttribute('colspan'));
         }
+
+        if (score_index == -1 && children_tags && children_tags[0].textContent == "Score") {
+            score_index = i;
+        }
     }
 
+    // parse scores
+    var test_scores = new Array();
+    if (score_index != -1) {
+        for (i = 2; i < rows.length; ++i) {
+            test_scores.push(parseInt(rows[i].children[score_index].innerText));
+        }
+    }
+    console.log(test_scores);
+
+    // parse test results
     var test_names = new Array();
     var test_results = new Array();
 
@@ -176,24 +192,25 @@ function display_overview() {
     }
 
     if (subject && catalog) {
-        var list_tag = document.createElement('ul');
-        list_tag.className = "marmostats-list";
-        list_tag.innerHTML = '<li>Total Students: <b id="marmostats-total-students"></b></li>\
-                              <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
-                              <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>';
-        document.querySelector('div[id="marmostats-test-summary"]').appendChild(list_tag);
-
         update_total_students(subject, catalog);
     }
 }
 
 // display stats for all test cases
 function display_stats() {
+    // setup html tags for showing results
     var result_table = document.querySelector('[title="projectTestResults"]');
     var overview_tag = document.createElement('div');
     overview_tag.id = 'marmostats-overview';
     overview_tag.innerHTML = '<div id="marmostats-test-summary"></div><div id="marmostats-chart"></div>';
     result_table.parentElement.prepend(overview_tag);
+
+    var list_tag = document.createElement('ul');
+        list_tag.className = "marmostats-list";
+        list_tag.innerHTML = '<li>Total Students: <b id="marmostats-total-students"></b></li>\
+                              <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
+                              <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>';
+        document.querySelector('div[id="marmostats-test-summary"]').appendChild(list_tag);
 
     if (result_table != undefined) {
         parse_result_table(result_table);
