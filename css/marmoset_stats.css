@@ -14,6 +14,10 @@ li {
     margin-block-end: 0px;
 }
 
+b.marmostats-score {
+    margin-right: 10px;
+}
+
 #marmostats-chart {
     margin-left: 50px;
     margin-bottom: 20px;

@@ -41,6 +41,28 @@ function update_submission_rate(total_students, total_submissions) {
     }
 }
 
+// update the summary of student scores
+function update_student_scores(test_scores) {
+    test_scores.sort((a, b) => a - b);
+    const sum = test_scores.reduce((a, b) => a + b, 0);
+    const mean = (sum / test_scores.length).toFixed(1);
+    const max = test_scores[test_scores.length - 1];
+    const min = test_scores[0];
+
+    var median = 0;
+    if (test_scores.length % 2 == 0) {
+        median = (test_scores[Math.floor(test_scores.length / 2)] +
+                  test_scores[Math.floor(test_scores.length / 2) + 1]) / 2;
+    } else {
+        median = test_scores[Math.floor(test_scores.length / 2)];
+    }
+
+    $("#marmostats-score-mean").html(mean);
+    $("#marmostats-score-median").html(median);
+    $("#marmostats-score-min").html(min);
+    $("#marmostats-score-max").html(max);
+}
+
 // draw a column chart about the test results under overview
 function draw_chart(test_names, test_results) {
     var chart_canvas = document.createElement('canvas');
@@ -50,7 +72,7 @@ function draw_chart(test_names, test_results) {
     var chart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'bar',
-    
+
         // The data for our dataset
         data: {
             labels: test_names,
@@ -66,7 +88,7 @@ function draw_chart(test_names, test_results) {
                 barPercentage: 0.8
             }]
         },
-    
+
         // Configuration options go here
         options: {
             events: ['mousemove'],
@@ -95,8 +117,8 @@ function draw_chart(test_names, test_results) {
     chart_canvas.parentNode.style.width = '700px';
 }
 
-// Parse the result for a single test case and add the result to title
-// test_ind starts from 0 for public tests, followed by secret tests
+// parse the result for a single test case and add the result to title
+//   test_ind starts from 0 for public tests, followed by secret tests
 function parse_test_result(table, test_ind, col_ind) {
     var test_rows = table.getElementsByTagName('tr');
     var title_tag = test_rows[1].getElementsByTagName('th')[test_ind];
@@ -137,7 +159,7 @@ function parse_result_table(result_table) {
             public_index = i;
             total_public_tests = Number(titles[i].getAttribute('colspan'));
         }
-        
+
         if (secret_index == -1 && titles[i].textContent == "Secret") {
             secret_index = i;
             total_secret_tests = Number(titles[i].getAttribute('colspan'));
@@ -155,7 +177,9 @@ function parse_result_table(result_table) {
             test_scores.push(parseInt(rows[i].children[score_index].innerText));
         }
     }
-    console.log(test_scores);
+    if (test_scores) {
+        update_student_scores(test_scores);
+    }
 
     // parse test results
     var test_names = new Array();
@@ -206,11 +230,15 @@ function display_stats() {
     result_table.parentElement.prepend(overview_tag);
 
     var list_tag = document.createElement('ul');
-        list_tag.className = "marmostats-list";
-        list_tag.innerHTML = '<li>Total Students: <b id="marmostats-total-students"></b></li>\
-                              <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
-                              <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>';
-        document.querySelector('div[id="marmostats-test-summary"]').appendChild(list_tag);
+    list_tag.className = "marmostats-list";
+    list_tag.innerHTML = '<li>Total Students: <b id="marmostats-total-students"></b></li>\
+                          <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
+                          <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>\
+                          <li>Score Summary: Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
+                                             Median: <b class="marmostats-score" id="marmostats-score-median"></b> \
+                                             Max: <b class="marmostats-score" id="marmostats-score-max"></b> \
+                                             Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>';
+    document.querySelector('div[id="marmostats-test-summary"]').appendChild(list_tag);
 
     if (result_table != undefined) {
         parse_result_table(result_table);
