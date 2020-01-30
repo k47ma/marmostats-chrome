@@ -70,11 +70,32 @@ function update_project_stats(project_name, target_tag, total_students, projects
 
 // try to draw a column chart about the test results under overview
 function draw_chart(projects) {
+    const total_projects = Object.keys(projects).length;
+    var finished_projects = 0;
     for (var project_name in projects) {
-        if (projects[project_name]['submission'] == -1) {
-            return;
+        if (projects[project_name]['submission'] != -1) {
+            ++finished_projects;
         }
     }
+
+    // draw progress bar if not all projects are done
+    var progress_container = document.getElementById('marmostats-progress');
+    var progress_tag = document.getElementById('marmostats-progress-bar-background');
+    var bar_tag = document.getElementById('marmostats-progress-bar');
+    var perc_tag = document.getElementById('marmostats-progress-perc');
+    const percent = (finished_projects / total_projects * 100).toFixed(1) + '%';
+    
+    progress_container.style.visibility = 'visible';
+    bar_tag.style.width = percent;
+    perc_tag.innerText = percent;
+
+    if (finished_projects < total_projects) {
+        return;
+    }
+
+    progress_container.style.visibility = 'hidden';
+    progress_container.style.height = 0;
+    progress_container.style.margin = 0;
 
     var submissions = new Array();
     var correctness = new Array();
@@ -146,7 +167,6 @@ function draw_chart(projects) {
     const new_height = Math.floor(table_width * 0.4);
     chart_canvas.parentNode.style.maxWidth = new_width;
     chart_canvas.parentNode.style.maxHeight = new_height;
-
     chart_canvas.parentElement.style.width = '80%';
 }
 
@@ -206,6 +226,11 @@ function display_stats() {
     overview_tag.id = 'marmostats-overview';
     overview_tag.innerHTML = '<div id="marmostats-test-summary"> \
                                 <p>Total Students: <b id="marmostats-total-students"></b></p> \
+                              </div> \
+                              <div id="marmostats-progress"> \
+                                <p id="marmostats-progress-text">Loading project results...</p>\
+                                <div id="marmostats-progress-bar-background"><div id="marmostats-progress-bar"></div></div> \
+                                <p id="marmostats-progress-perc"></p> \
                               </div> \
                               <div id="marmostats-chart"></div>';
     project_table.parentElement.prepend(overview_tag);

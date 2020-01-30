@@ -33,3 +33,45 @@ b.marmostats-score {
 #marmostats-test-summary {
     padding-left: 40px;
 }
+
+#marmostats-progress {
+    margin-left: 40px;
+    width: 100%;
+    height: 20px;
+}
+
+#marmostats-progress {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    display: block;
+    height: 40px;
+    visibility: hidden;
+}
+
+#marmostats-progress-bar-background {
+    width: 60%;
+    height: 20px;
+    background-color: grey;
+    display: inline-block;
+}
+
+#marmostats-progress-text {
+    font-family: monospace;
+    font-size: 16px;
+}
+
+#marmostats-progress-bar {
+    height: 100%;
+    background-color: lightgreen;
+    vertical-align: top;
+}
+
+#marmostats-progress-perc {
+    font-family: monospace;
+    font-size: 16px;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 10px;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
