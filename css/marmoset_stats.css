@@ -1,10 +1,15 @@
+li {
+    padding: 3px;
+}
+
+table.marmostats-table {
+    border-spacing: 2px;
+}
+
 ul.marmostats-list {
     font-size: 17px;
     margin-left: 35px;
-}
-
-li {
-    padding: 3px;
+    padding-inline-start: 0px;
 }
 
 p.marmostats-inline {
@@ -23,4 +28,8 @@ b.marmostats-score {
 #marmostats-chart {
     margin-left: 50px;
     margin-bottom: 20px;
+}
+
+#marmostats-test-summary {
+    padding-left: 40px;
 }
