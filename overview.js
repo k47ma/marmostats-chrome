@@ -58,12 +58,20 @@ function update_project_stats(project_name, rate_tag, score_tag, total_students,
         const max = test_scores[test_scores.length - 1];
         const total_submissions = test_scores.length;
 
-        const submission_rate = (total_submissions / total_students * 100).toFixed(1);
-        const avg_score = (mean / max * 100).toFixed(1);
+        var submission_rate = (total_submissions / total_students * 100).toFixed(1);
+        var avg_score = (mean / max * 100).toFixed(1);
+        if (total_submissions == 0) {
+            avg_score = '-';
+        }
         rate_tag.innerHTML = '<b>' + submission_rate + '%</b>' + '/' + '<b>' + avg_score + '%</b>';
-        score_tag.innerText = max;
+        if (max == undefined) {
+            score_tag.innerText = '-';
+        } else {
+            score_tag.innerText = max;
+        }
+
         projects[project_name]['submission'] = submission_rate;
-        projects[project_name]['correctness'] = avg_score;
+        projects[project_name]['correctness'] = (avg_score == '-') ? 0 : avg_score;
 
         draw_chart(projects);
     });
@@ -167,7 +175,7 @@ function draw_chart(projects) {
     const new_height = Math.floor(table_width * 0.4);
     chart_canvas.parentNode.style.maxWidth = new_width;
     chart_canvas.parentNode.style.maxHeight = new_height;
-    chart_canvas.parentElement.style.width = '80%';
+    chart_canvas.parentElement.style.width = '90%';
 }
 
 // display an overview above the overview table
