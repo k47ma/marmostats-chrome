@@ -10,7 +10,7 @@ Libraries used in this project:
 Since the project is not packed and published in Chrome Extension Store, you have to load the repository as unpacked package in Chrome browser. Here are some steps you can follow to load this extension:
 
 - Clone this repository to your local machine
-- Open [extension page](chrome://extensions/) in Chrome
+- Open [extensions page](chrome://extensions/) in Chrome (three vertical dots at top right > More tools > Extensions)
 - Turn on **Developer Mode** at the top right corner
 - Click **Load Unpacked** button at the top left corner
 - Select the local folder for the repository and click "Select Folder"
@@ -21,6 +21,6 @@ Since the project is not packed and published in Chrome Extension Store, you hav
 Similar to the previous part, since this tool is not packed and published, you will need to do some *manual update*.
 
 - Run `git pull` on your local machine to update the local copy of this repository
-- Open [extension page](chrome://extensions/) in Chrome
+- Open [extensions page](chrome://extensions/) in Chrome (three vertical dots at top right > More tools > Extensions)
 - Click the **refresh** icon in this project
 - Refresh your Marmoset page and you are good to go (again)!
