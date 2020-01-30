@@ -108,8 +108,9 @@ function draw_chart(test_names, test_results) {
         }
     });
 
-    chart_canvas.parentNode.style.height = '350px';
-    chart_canvas.parentNode.style.width = '700px';
+    chart_canvas.parentNode.style.maxHeight = '350px';
+    chart_canvas.parentNode.style.maxWidth = '700px';
+    chart_canvas.parentElement.style.width = '80%';
 }
 
 // parse the result for a single test case and add the result to title

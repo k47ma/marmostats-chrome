@@ -133,12 +133,21 @@ function draw_chart(projects) {
                         suggestedMax: 100
                     }
                 }]
-            }
+            },
+            responsive: true,
+            responsiveAnimationDuration: 300,
+            maintainAspectRatio: true
         }
     });
 
-    chart_canvas.parentNode.style.height = '400px';
-    chart_canvas.parentNode.style.width = '800px';
+    const overview_table = document.getElementsByTagName('table')[0];
+    const table_width = overview_table.clientWidth;
+    const new_width = Math.floor(table_width * 0.8);
+    const new_height = Math.floor(table_width * 0.4);
+    chart_canvas.parentNode.style.maxWidth = new_width;
+    chart_canvas.parentNode.style.maxHeight = new_height;
+
+    chart_canvas.parentElement.style.width = '80%';
 }
 
 // display an overview above the overview table
