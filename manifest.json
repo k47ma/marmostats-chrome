@@ -14,5 +14,6 @@
           "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "overview.js"],
           "css": ["css/marmoset_stats.css"]
         }
-    ]
+    ],
+    "web_accessible_resources": ["images/loading.gif"]
 }

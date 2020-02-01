@@ -300,6 +300,13 @@ function add_test_details(total_students) {
             rows[i].insertBefore(rate_tag, rows[i].children[1]);
             rows[i].insertBefore(score_tag, rows[i].children[2]);
 
+            var image_tag_1 = document.createElement('img');
+            image_tag_1.src = chrome.extension.getURL('images/loading.gif');
+            image_tag_1.style.height = '18px';
+            var image_tag_2 = image_tag_1.cloneNode(true);
+            rate_tag.appendChild(image_tag_1);
+            score_tag.appendChild(image_tag_2);
+
             projects[project_name] = {id: project_id, submission: -1, correctness: -1};
             projects_displayed.push(project_name);
             update_project_stats(project_name, rate_tag, score_tag, total_students);
