@@ -88,24 +88,27 @@ td.marmostats-selector {
 }
 
 #marmostats-selector-table th {
-    padding: 0px;
+    padding: 5px;
     margin: 0px;
     width: 100%;
     background: none;
     border: 1px solid black;
 }
 
-#marmostats-selector-table th td {
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 100%;
-    border: none;
-}
-
 #marmostats-selector-table tr td {
     min-width: 40px;
-    padding: 2px;
+    padding: 5px;
     border: 1px solid black;
+}
+
+#marmostats-selectall {
+    font-weight: bold;
+    font-size: 14px;
+    padding: 5px;
+    margin-left: 2px;
+    border-style: solid;
+    border-width: 2px !important;
+    border-color: rgb(175, 175, 175) !important;
 }
 
 .marmostats-selector {

@@ -1,6 +1,7 @@
 /* Script for homepage information */
 
 const key = "97a591e399f591e64a5f4536d08d9574";
+const current_url = window.location.href;
 
 var projects = new Object();
 var projects_displayed = new Array();
@@ -214,15 +215,17 @@ function add_selectors(chart) {
     }
 
     const selector_table = document.getElementById('marmostats-selector-table');
-    var table_title_row = document.createElement('th');
-    var table_title = document.createElement('td');
-    table_title.setAttribute('colspan', assignments.length);
+    var table_title_row = document.createElement('tr');
+    var table_title = document.createElement('th');
+    table_title.setAttribute('colspan', assignments.length + 1);
     table_title.innerText = "Displayed Assignments";
     table_title_row.appendChild(table_title);
     selector_table.appendChild(table_title_row);
 
     var selector_container = document.createElement('tr');
     selector_table.appendChild(selector_container);
+    var all_selector = document.createElement('td');
+    var selectors = new Array();
     for (const assign_name of assignments.sort()) {
         var selector = document.createElement('td');
         selector.id = 'marmostats-selector-' + assign_name;
@@ -233,6 +236,7 @@ function add_selectors(chart) {
         selector.onclick = function() {
             if (this.classList.contains('selected')) {
                 this.classList.remove('selected');
+                all_selector.classList.remove('selected');
                 for (var i = projects_displayed.length - 1; i >= 0; --i) {
                     if (projects_displayed[i].startsWith(assign_name)) {
                         projects_displayed.splice(i, 1);
@@ -246,11 +250,47 @@ function add_selectors(chart) {
                         projects_displayed.push(project_name);
                     }
                 }
+                
+                var all_selected = true;
+                for (const check_selector of selectors) {
+                    if (!check_selector.classList.contains('selected')) {
+                        all_selected = false;
+                        break;
+                    }
+                }
+
+                if (all_selected) {
+                    all_selector.classList.add('selected');
+                }
             }
             update_chart(chart);
         };
         selector_container.appendChild(selector);
+        selectors.push(selector);
     }
+
+    all_selector.id = 'marmostats-selectall';
+    all_selector.classList.add('marmostats-selector', 'selected');
+    all_selector.innerText = 'Toggle All';
+    all_selector.onmouseenter = function() {this.classList.add('mouseover')};
+    all_selector.onmouseout = function() {this.classList.remove('mouseover')};
+    all_selector.onclick = function() {
+        if (this.classList.contains('selected')) {
+            for (var selector of selectors) {
+                if (selector.classList.contains('selected')) {
+                    selector.click();
+                }
+            }
+        } else {
+            for (var selector of selectors) {
+                if (!selector.classList.contains('selected')) {
+                    selector.click();
+                }
+            }
+        }
+        update_chart(chart);
+    };
+    selector_container.appendChild(all_selector);
 }
 
 // display an overview above the overview table
