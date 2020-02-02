@@ -9,25 +9,6 @@ var load_finished = false;
 var projects = new Object();
 var projects_displayed = new Array();
 
-// update the number of total students and students who have submitted
-function update_total_students(subject, catalog) {
-    const termlist_url = "https://api.uwaterloo.ca/v2/terms/list.json?key="+key;
-    var total_students = 0;
-
-    $.get(termlist_url, function(termlist) {
-            const term = termlist.data.current_term.toString();
-            const enroll_url = "https://api.uwaterloo.ca/v2/terms/"+term+"/"+subject+"/"+catalog+"/schedule.json?key="+key;
-            $.get(enroll_url, function(enrollment) {
-                for (const section_info of enrollment.data) {
-                    if (section_info.section.startsWith('LEC')) {
-                        total_students += section_info.enrollment_total;
-                    }
-                }
-                $("#marmostats-total-students").html(total_students);
-                add_test_details(total_students);
-            });
-    });
-}
 
 // update the submission rate and correctness rate for each project
 function update_project_stats(project_name, rate_tag, score_tag, total_students) {
@@ -179,7 +160,7 @@ function draw_chart() {
         }
     });
 
-    const overview_table = document.getElementsByClassName('marmostats-table')[0];
+    const overview_table = document.getElementsByClassName('marmostats-overview-table')[0];
     const table_width = overview_table.clientWidth;
     const new_width = Math.floor(table_width * 0.8);
     const new_height = Math.floor(table_width * 0.4);
@@ -328,8 +309,44 @@ function add_refresh_button() {
     button.prepend(image_tag);
     button.onclick = function() {
         loading_tag.style.visibility = 'visible';
-        display_overview() 
+        refresh_page() 
     };
+}
+
+// refresh test data
+function refresh_page() {
+    $.get(current_url, function(response) {
+        var doc = document.createElement('html');
+        doc.innerHTML = response;
+        
+        var result_table = doc.getElementsByTagName('table')[0];
+        result_table.classList.add('marmostats-overview-table');
+        
+        var current_table = document.getElementsByClassName('marmostats-overview-table')[0];
+        current_table.parentNode.replaceChild(result_table, current_table);
+        
+        display_overview();
+    });
+}
+
+// update the number of total students and students who have submitted
+function update_total_students(subject, catalog) {
+    const termlist_url = "https://api.uwaterloo.ca/v2/terms/list.json?key="+key;
+
+    $.get(termlist_url, function(termlist) {
+            const term = termlist.data.current_term.toString();
+            const enroll_url = "https://api.uwaterloo.ca/v2/terms/"+term+"/"+subject+"/"+catalog+"/schedule.json?key="+key;
+            $.get(enroll_url, function(enrollment) {
+                var total_students = 0;
+                for (const section_info of enrollment.data) {
+                    if (section_info.section.startsWith('LEC')) {
+                        total_students += section_info.enrollment_total;
+                    }
+                }
+                $("#marmostats-total-students").html(total_students);
+                add_test_details(total_students);
+            });
+    });
 }
 
 // display an overview above the overview table
@@ -353,22 +370,20 @@ function display_overview() {
 
 // add test details for each project in the table
 function add_test_details(total_students) {
-    var project_table = document.getElementsByClassName('marmostats-table')[0];
+    var project_table = document.getElementsByClassName('marmostats-overview-table')[0];
     var rows = project_table.getElementsByTagName('tr');
 
-    if (!load_finished) {
-        var title_rate_tag = document.createElement('th');
-        title_rate_tag.innerHTML = "Submission<br />/Avg. Score";
-        rows[0].insertBefore(title_rate_tag, rows[0].children[1]);
+    var title_rate_tag = document.createElement('th');
+    title_rate_tag.innerHTML = "Submission<br />/Avg. Score";
+    rows[0].insertBefore(title_rate_tag, rows[0].children[1]);
 
-        var title_score_tag = document.createElement('th');
-        title_score_tag.innerHTML = "Max<br />Score";
-        rows[0].insertBefore(title_score_tag, rows[0].children[2]);
-    }
+    var title_score_tag = document.createElement('th');
+    title_score_tag.innerHTML = "Max<br />Score";
+    rows[0].insertBefore(title_score_tag, rows[0].children[2]);
+
 
     for (var i = 1; i < rows.length; ++i) {
         if (rows[i].children[0].hasAttribute('colspan')) {
-            if (load_finished) continue;
             const total_cols = rows[i].children[0].getAttribute('colspan');
             rows[i].children[0].setAttribute('colspan', total_cols + 2);
         } else {
@@ -377,19 +392,10 @@ function add_test_details(total_students) {
             const project_id = split_list[split_list.length - 1];
             const project_name = rows[i].children[0].innerText;
 
-            var rate_tag = null;
-            var score_tag = null;
-            if (!load_finished) {
-                rate_tag = document.createElement('td');
-                score_tag = document.createElement('td');
-                rows[i].insertBefore(rate_tag, rows[i].children[1]);
-                rows[i].insertBefore(score_tag, rows[i].children[2]);
-            } else {
-                rate_tag = rows[i].children[1];
-                score_tag = rows[i].children[2];
-                rate_tag.innerHTML = '';
-                score_tag.innerHTML = '';
-            }
+            var rate_tag = document.createElement('td');
+            var score_tag = document.createElement('td');
+            rows[i].insertBefore(rate_tag, rows[i].children[1]);
+            rows[i].insertBefore(score_tag, rows[i].children[2]);
 
             var image_tag_1 = document.createElement('img');
             image_tag_1.src = chrome.extension.getURL('images/loading.gif');
@@ -411,7 +417,7 @@ function add_test_details(total_students) {
 function display_stats() {
     // setup html tags for showing results
     var project_table = document.getElementsByTagName('table')[0];
-    project_table.classList.add('marmostats-table');
+    project_table.classList.add('marmostats-overview-table');
 
     var overview_tag = document.createElement('div');
     overview_tag.id = 'marmostats-overview';
