@@ -92,7 +92,7 @@ function draw_chart() {
         return;
     }
 
-    progress_container.style.visibility = 'hidden';
+    progress_container.style.visibility = 'collapse';
     progress_container.style.height = 0;
     progress_container.style.margin = 0;
 
@@ -223,6 +223,7 @@ function add_selectors() {
     table_title.innerText = "Displayed Assignments";
     table_title_row.appendChild(table_title);
     selector_table.appendChild(table_title_row);
+    selector_table.style.visibility = 'visible';
 
     var selector_container = document.createElement('tr');
     selector_table.appendChild(selector_container);

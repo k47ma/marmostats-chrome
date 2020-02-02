@@ -30,6 +30,11 @@ td.marmostats-selector {
     display: inline-block;
 }
 
+#marmostats-total-students {
+    font-size: 18px;
+    font-family: monospace;
+}
+
 #marmostats-chart {
     margin-left: 50px;
     margin-bottom: 20px;
@@ -50,19 +55,19 @@ td.marmostats-selector {
     margin-bottom: 30px;
     display: block;
     height: 40px;
-    visibility: hidden;
+    visibility: collapse;
 }
 
 #marmostats-progress-bar-background {
-    width: 60%;
-    height: 20px;
+    width: 55%;
+    height: 15px;
     background-color: grey;
     display: inline-block;
 }
 
 #marmostats-progress-text {
     font-family: monospace;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 #marmostats-progress-bar {
@@ -86,6 +91,7 @@ td.marmostats-selector {
     border-style: none;
     margin-left: 40px;
     display: inline-block;
+    visibility: collapse;
 }
 
 #marmostats-selector-table th {
