@@ -85,6 +85,7 @@ td.marmostats-selector {
     border-collapse: collapse;
     border-style: none;
     margin-left: 40px;
+    display: inline-block;
 }
 
 #marmostats-selector-table th {
@@ -111,12 +112,54 @@ td.marmostats-selector {
     border-color: rgb(175, 175, 175) !important;
 }
 
+#marmostats-refresh-container {
+    vertical-align: bottom;
+    display: inline-block;
+    margin-left: 20%;
+    margin-bottom: 15px;
+}
+
+#marmostats-refresh-button {
+    width: 100px;
+    height: 30px;
+    padding: 5px;
+    background-color: rgba(125, 255, 125, 0.5);
+}
+
+#marmostats-refresh-button:hover {
+    background-color: rgba(125, 255, 125, 0.8);
+}
+
+#marmostats-refresh-button img {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+#marmostats-refresh-button span {
+    font-size: 14px;
+    font-family: monospace;
+    font-weight: normal;
+    margin-left: 5px;
+    padding: 0px;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+
+#marmostats-refresh-loading {
+    visibility: hidden;
+    height: 50px;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 10px;
+}
+
 .marmostats-selector {
     background-color: none;
     cursor: pointer;
 }
 
-.marmostats-selector.mouseover {
+.marmostats-selector:hover {
     background-color: rgba(145, 238, 145, 0.3);
 }
 
@@ -124,6 +167,6 @@ td.marmostats-selector {
     background-color: rgba(145, 238, 145, 0.8);
 }
 
-.marmostats-selector.selected.mouseover {
+.marmostats-selector.selected:hover {
     background-color: rgba(145, 238, 145, 1.0);
 }

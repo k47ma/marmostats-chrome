@@ -15,6 +15,6 @@
           "css": ["css/marmoset_stats.css"]
         }
     ],
-    "web_accessible_resources": ["images/loading.gif"],
+    "web_accessible_resources": ["images/loading.gif", "images/refresh.png"],
     "permissions": ["tabs"]
 }

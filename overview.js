@@ -3,6 +3,9 @@
 const key = "97a591e399f591e64a5f4536d08d9574";
 const current_url = window.location.href;
 
+var assign_chart = null;
+var load_finished = false;
+
 var projects = new Object();
 var projects_displayed = new Array();
 
@@ -10,7 +13,6 @@ var projects_displayed = new Array();
 function update_total_students(subject, catalog) {
     const termlist_url = "https://api.uwaterloo.ca/v2/terms/list.json?key="+key;
     var total_students = 0;
-    var total_submissions = 0;
 
     $.get(termlist_url, function(termlist) {
             const term = termlist.data.current_term.toString();
@@ -77,7 +79,11 @@ function update_project_stats(project_name, rate_tag, score_tag, total_students)
         projects[project_name]['submission'] = submission_rate;
         projects[project_name]['correctness'] = (avg_score == '-') ? 0 : avg_score;
 
-        draw_chart();
+        if (!load_finished) {
+            draw_chart();
+        } else {
+            update_chart();
+        }
     });
 }
 
@@ -117,10 +123,11 @@ function draw_chart() {
     }
 
     var chart_canvas = document.createElement('canvas');
+    chart_canvas.id = 'marmostats-chart-canvas';
     document.querySelector('div[id="marmostats-chart"]').appendChild(chart_canvas);
 
     var ctx = chart_canvas.getContext('2d');
-    var chart = new Chart(ctx, {
+    assign_chart = new Chart(ctx, {
         type: 'line',
 
         data: {
@@ -180,13 +187,22 @@ function draw_chart() {
     chart_canvas.parentNode.style.maxHeight = new_height;
     chart_canvas.parentElement.style.width = '90%';
 
-    add_selectors(chart);
+    add_selectors();
+    add_refresh_button();
+
+    load_finished = true;
 }
 
 // update an existing chart
-function update_chart(chart) {
+function update_chart() {
+    for (var project_name in projects) {
+        if (projects[project_name]['submission'] == -1) {
+            return;
+        }
+    }
+
     projects_displayed.sort();
-    chart.data.labels = projects_displayed;
+    assign_chart.data.labels = projects_displayed;
 
     var submissions = new Array();
     var correctness = new Array();
@@ -195,13 +211,18 @@ function update_chart(chart) {
         correctness.push(projects[project_name]['correctness']);
     }
 
-    chart.data.datasets[0].data = submissions;
-    chart.data.datasets[1].data = correctness;
-    chart.update();
+    assign_chart.data.datasets[0].data = submissions;
+    assign_chart.data.datasets[1].data = correctness;
+    assign_chart.update();
+
+    var loading_icon = document.getElementById('marmostats-refresh-loading');
+    if (loading_icon) {
+        loading_icon.style.visibility = 'hidden';
+    }
 }
 
 // add selectors for each assignment
-function add_selectors(chart) {
+function add_selectors() {
     const assign_regex = /^\D+\d*/g;
     var assignments = new Array();
     for (const project_name of Object.keys(projects)) {
@@ -231,8 +252,6 @@ function add_selectors(chart) {
         selector.id = 'marmostats-selector-' + assign_name;
         selector.classList.add('marmostats-selector', 'selected');
         selector.innerText = assign_name;
-        selector.onmouseenter = function() {this.classList.add('mouseover')};
-        selector.onmouseout = function() {this.classList.remove('mouseover')};
         selector.onclick = function() {
             if (this.classList.contains('selected')) {
                 this.classList.remove('selected');
@@ -263,7 +282,7 @@ function add_selectors(chart) {
                     all_selector.classList.add('selected');
                 }
             }
-            update_chart(chart);
+            update_chart();
         };
         selector_container.appendChild(selector);
         selectors.push(selector);
@@ -272,8 +291,6 @@ function add_selectors(chart) {
     all_selector.id = 'marmostats-selectall';
     all_selector.classList.add('marmostats-selector', 'selected');
     all_selector.innerText = 'Toggle All';
-    all_selector.onmouseenter = function() {this.classList.add('mouseover')};
-    all_selector.onmouseout = function() {this.classList.remove('mouseover')};
     all_selector.onclick = function() {
         if (this.classList.contains('selected')) {
             for (var selector of selectors) {
@@ -288,9 +305,31 @@ function add_selectors(chart) {
                 }
             }
         }
-        update_chart(chart);
+        update_chart();
     };
     selector_container.appendChild(all_selector);
+}
+
+// add refresh button after selector table
+function add_refresh_button() {
+    var container = document.getElementById('marmostats-refresh-container');
+    var button = document.createElement('button');
+    button.id = 'marmostats-refresh-button';
+    button.innerHTML = '<span>Refresh</span>';
+    container.appendChild(button);
+
+    var loading_tag = document.createElement('img');
+    loading_tag.id = 'marmostats-refresh-loading';
+    loading_tag.src = chrome.extension.getURL('images/loading.gif');
+    container.appendChild(loading_tag);
+
+    var image_tag = document.createElement('img');
+    image_tag.src = chrome.extension.getURL('images/refresh.png');
+    button.prepend(image_tag);
+    button.onclick = function() {
+        loading_tag.style.visibility = 'visible';
+        display_overview() 
+    };
 }
 
 // display an overview above the overview table
@@ -317,16 +356,19 @@ function add_test_details(total_students) {
     var project_table = document.getElementsByClassName('marmostats-table')[0];
     var rows = project_table.getElementsByTagName('tr');
 
-    var title_rate_tag = document.createElement('th');
-    title_rate_tag.innerHTML = "Submission<br />/Avg. Score";
-    rows[0].insertBefore(title_rate_tag, rows[0].children[1]);
+    if (!load_finished) {
+        var title_rate_tag = document.createElement('th');
+        title_rate_tag.innerHTML = "Submission<br />/Avg. Score";
+        rows[0].insertBefore(title_rate_tag, rows[0].children[1]);
 
-    var title_score_tag = document.createElement('th');
-    title_score_tag.innerHTML = "Max<br />Score";
-    rows[0].insertBefore(title_score_tag, rows[0].children[2]);
+        var title_score_tag = document.createElement('th');
+        title_score_tag.innerHTML = "Max<br />Score";
+        rows[0].insertBefore(title_score_tag, rows[0].children[2]);
+    }
 
     for (var i = 1; i < rows.length; ++i) {
         if (rows[i].children[0].hasAttribute('colspan')) {
+            if (load_finished) continue;
             const total_cols = rows[i].children[0].getAttribute('colspan');
             rows[i].children[0].setAttribute('colspan', total_cols + 2);
         } else {
@@ -335,10 +377,19 @@ function add_test_details(total_students) {
             const project_id = split_list[split_list.length - 1];
             const project_name = rows[i].children[0].innerText;
 
-            var rate_tag = document.createElement('td');
-            var score_tag = document.createElement('td');
-            rows[i].insertBefore(rate_tag, rows[i].children[1]);
-            rows[i].insertBefore(score_tag, rows[i].children[2]);
+            var rate_tag = null;
+            var score_tag = null;
+            if (!load_finished) {
+                rate_tag = document.createElement('td');
+                score_tag = document.createElement('td');
+                rows[i].insertBefore(rate_tag, rows[i].children[1]);
+                rows[i].insertBefore(score_tag, rows[i].children[2]);
+            } else {
+                rate_tag = rows[i].children[1];
+                score_tag = rows[i].children[2];
+                rate_tag.innerHTML = '';
+                score_tag.innerHTML = '';
+            }
 
             var image_tag_1 = document.createElement('img');
             image_tag_1.src = chrome.extension.getURL('images/loading.gif');
@@ -348,7 +399,9 @@ function add_test_details(total_students) {
             score_tag.appendChild(image_tag_2);
 
             projects[project_name] = {id: project_id, submission: -1, correctness: -1};
-            projects_displayed.push(project_name);
+            if (!load_finished && !projects_displayed.includes(project_name)) {
+                projects_displayed.push(project_name);
+            }
             update_project_stats(project_name, rate_tag, score_tag, total_students);
         }
     }
@@ -367,6 +420,7 @@ function display_stats() {
                               </div> \
                               <div id="marmostats-selector-container"> \
                                 <table id="marmostats-selector-table"></table> \
+                                <div id="marmostats-refresh-container"></div> \
                               </div> \
                               <div id="marmostats-progress"> \
                                 <p id="marmostats-progress-text">Loading project results...</p>\
