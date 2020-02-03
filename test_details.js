@@ -56,9 +56,13 @@ function update_student_scores(test_scores) {
         median = test_scores[Math.floor(test_scores.length / 2)];
     }
 
-    $("#marmostats-score-mean").html(mean);
-    $("#marmostats-score-median").html(median);
-    $("#marmostats-score-min").html(min);
+    const mean_perc = (mean / max * 100).toFixed(1);
+    const median_perc = (median / max * 100).toFixed(1);
+    const min_perc = (min / max * 100).toFixed(1);
+
+    $("#marmostats-score-mean").html(mean + ' (' + mean_perc + '%)');
+    $("#marmostats-score-median").html(median + ' (' + median_perc + '%)');
+    $("#marmostats-score-min").html(min + ' (' + min_perc + '%)');
     $("#marmostats-score-max").html(max);
 }
 
@@ -230,7 +234,8 @@ function display_stats() {
     list_tag.innerHTML = '<li>Total Students: <b id="marmostats-total-students"></b></li>\
                           <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
                           <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>\
-                          <li>Score Summary: Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
+                          <li>Score Summary: &nbsp;&nbsp; \
+                                             Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
                                              Median: <b class="marmostats-score" id="marmostats-score-median"></b> \
                                              Max: <b class="marmostats-score" id="marmostats-score-max"></b> \
                                              Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>';

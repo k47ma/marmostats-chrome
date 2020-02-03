@@ -44,6 +44,10 @@ td.marmostats-selector {
     padding-left: 40px;
 }
 
+#marmostats-test-summary b {
+    font-family: monospace;
+}
+
 #marmostats-progress {
     margin-left: 40px;
     width: 100%;
