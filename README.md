@@ -7,7 +7,9 @@ Libraries used in this project:
 
 ### How to Use This Tool in Chrome?
 
-Since the project is not packed and published in Chrome Extension Store, you have to load the repository as unpacked package in Chrome browser. Here are some steps you can follow to load this extension:
+It is published to Chrome Web Store. You may [install it directly from the store page](https://chrome.google.com/webstore/detail/marmostats/gppikefopnonalmomacfjbgefkbpngfi).
+
+If you want to install it as an unpacked package from source code. Here are some steps you can follow to load this extension:
 
 - Clone this repository to your local machine
 - Open [extensions page](chrome://extensions/) in Chrome (three vertical dots at top right > More tools > Extensions)
@@ -18,7 +20,9 @@ Since the project is not packed and published in Chrome Extension Store, you hav
 
 ### How to Update This Tool when the Repository Updates?
 
-Similar to the previous part, since this tool is not packed and published, you will need to do some *manual update*.
+You don't need to worry about updates if you install the extension from Chrome Web Store.
+
+If you installed it as an unpacked package, you will need to do some *manual update*:
 
 - Run `git pull` on your local machine to update the local copy of this repository
 - Open [extensions page](chrome://extensions/) in Chrome (three vertical dots at top right > More tools > Extensions)
