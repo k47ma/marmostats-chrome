@@ -382,6 +382,9 @@ function add_test_details(total_students) {
     title_score_tag.innerHTML = "Max<br />Score";
     rows[0].insertBefore(title_score_tag, rows[0].children[2]);
 
+    var title_detail_tag = document.createElement('th');
+    title_detail_tag.innerHTML = "Test<br />Details";
+    rows[0].insertBefore(title_detail_tag, rows[0].children[3]);
 
     for (var i = 1; i < rows.length; ++i) {
         if (rows[i].children[0].hasAttribute('colspan')) {
@@ -395,15 +398,29 @@ function add_test_details(total_students) {
 
             var rate_tag = document.createElement('td');
             var score_tag = document.createElement('td');
+            var detail_tag = document.createElement('td');
             rows[i].insertBefore(rate_tag, rows[i].children[1]);
             rows[i].insertBefore(score_tag, rows[i].children[2]);
+            rows[i].insertBefore(detail_tag, rows[i].children[3]);
 
             var image_tag_1 = document.createElement('img');
             image_tag_1.src = chrome.extension.getURL('images/loading.gif');
             image_tag_1.style.height = '18px';
             var image_tag_2 = image_tag_1.cloneNode(true);
+
+            const detail_link = 'https://marmoset.student.cs.uwaterloo.ca/view/instructor/projectTestResults.jsp?projectPK='+project_id;
+            var detail_link_tag = document.createElement('a');
+            detail_link_tag.href = detail_link;
+            detail_link_tag.target = '_blank';
+            var detail_image = document.createElement('img');
+            detail_image.src = chrome.extension.getURL('images/chart.png');
+            detail_image.title = 'View Test Details for ' + project_name;
+            detail_image.style.height = '18px';
+            detail_link_tag.appendChild(detail_image);
+
             rate_tag.appendChild(image_tag_1);
             score_tag.appendChild(image_tag_2);
+            detail_tag.appendChild(detail_link_tag);
 
             projects[project_name] = {id: project_id, submission: -1, correctness: -1};
             if (!load_finished && !projects_displayed.includes(project_name)) {
