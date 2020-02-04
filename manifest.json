@@ -1,7 +1,7 @@
 {
     "name": "MarmoStats",
     "description": "A Chrome Extension for visualizing Marmoset test results",
-    "version": "1.1.0",
+    "version": "1.0.1",
     "manifest_version": 2,
     "content_scripts": [
         {
@@ -16,5 +16,14 @@
         }
     ],
     "web_accessible_resources": ["images/loading.gif", "images/refresh.png", "images/chart.png"],
-    "permissions": ["tabs"]
+    "permissions": ["tabs"],
+    "browser_action": {
+      "default_icon": {
+        "16": "icons/marmostats-16.png",
+        "32": "icons/marmostats-32.png",
+        "48": "icons/marmostats-48.png",
+        "64": "icons/marmostats-64.png",
+        "128": "icons/marmostats-128.png"
+      }
+    }
 }
