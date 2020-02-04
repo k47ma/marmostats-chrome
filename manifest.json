@@ -1,6 +1,6 @@
 {
     "name": "MarmoStats",
-    "shortname": "MarmoStats",
+    "short_name": "MarmoStats",
     "description": "A Chrome Extension for visualizing Marmoset test results",
     "version": "1.0.2",
     "manifest_version": 2,
