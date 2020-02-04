@@ -4,6 +4,7 @@ const key = "97a591e399f591e64a5f4536d08d9574";
 const current_url = window.location.href;
 
 var assign_chart = null;
+var chart_config = null;
 var load_finished = false;
 
 var projects = new Object();
@@ -108,33 +109,39 @@ function draw_chart() {
     document.querySelector('div[id="marmostats-chart"]').appendChild(chart_canvas);
 
     var ctx = chart_canvas.getContext('2d');
-    assign_chart = new Chart(ctx, {
+    chart_config = {
         type: 'line',
-
         data: {
             labels: projects_displayed,
             datasets: [{
                 label: 'Submission Rate',
                 data: submissions,
-                backgroundColor: 'rgba(30, 144, 255, 0.8)',
+                backgroundColor: 'rgba(30, 144, 255, 0.55)',
                 borderColor: 'rgba(30, 144, 255, 1.0)',
+                hoverBackgroundColor: 'rgba(30, 144, 255, 1.0)',
+                hoverBorderColor: 'rgba(30, 144, 255, 1.0)',
                 borderWidth: 2,
+                hoverBorderWidth: 3,
                 pointRadius: 3,
                 pointHoverBorderWidth: 5,
+                barPercentage: 0.7,
                 fill: false
             },
             {
                 label: 'Avg. Score',
                 data: correctness,
-                backgroundColor: 'rgba(100, 231, 100, 0.8)',
+                backgroundColor: 'rgba(122, 235, 122, 0.55)',
                 borderColor: 'rgba(100, 231, 100, 1.0)',
+                hoverBackgroundColor: 'rgba(100, 231, 100, 1.0)',
+                hoverBorderColor: 'rgba(100, 231, 100, 1.0)',
                 borderWidth: 2,
+                hoverBorderWidth: 3,
                 pointRadius: 3,
                 pointHoverRadius: 5,
+                barPercentage: 0.7,
                 fill: false
             }]
         },
-
         options: {
             scales: {
                 xAxes: [{
@@ -158,8 +165,17 @@ function draw_chart() {
             responsiveAnimationDuration: 100,
             maintainAspectRatio: true
         }
-    });
+    }
+    assign_chart = new Chart(ctx, chart_config);
 
+    set_chart_size(chart_canvas);
+    add_selectors();
+    add_buttons();
+
+    load_finished = true;
+}
+
+function set_chart_size(chart_canvas) {
     const overview_table = document.getElementsByClassName('marmostats-overview-table')[0];
     const table_width = overview_table.clientWidth;
     const new_width = Math.floor(table_width * 0.8);
@@ -167,11 +183,6 @@ function draw_chart() {
     chart_canvas.parentNode.style.maxWidth = new_width;
     chart_canvas.parentNode.style.maxHeight = new_height;
     chart_canvas.parentElement.style.width = '90%';
-
-    add_selectors();
-    add_refresh_button();
-
-    load_finished = true;
 }
 
 // update an existing chart
@@ -293,12 +304,25 @@ function add_selectors() {
 }
 
 // add refresh button after selector table
-function add_refresh_button() {
-    var container = document.getElementById('marmostats-refresh-container');
-    var button = document.createElement('button');
-    button.id = 'marmostats-refresh-button';
-    button.innerHTML = '<span>Refresh</span>';
-    container.appendChild(button);
+function add_buttons() {
+    var container = document.getElementById('marmostats-setting-container');
+    
+    var type_button = document.createElement('button');
+    type_button.id = 'marmostats-type-button';
+    type_button.innerHTML = '<span>Toggle</span>';
+    type_button.onclick = function() {
+        if (chart_config['type'] == 'line') {
+            set_chart_type('bar');
+        } else {
+            set_chart_type('line');
+        }
+    };
+    container.appendChild(type_button);
+
+    var refresh_button = document.createElement('button');
+    refresh_button.id = 'marmostats-refresh-button';
+    refresh_button.innerHTML = '<span>Refresh</span>';
+    container.appendChild(refresh_button);
 
     var loading_tag = document.createElement('img');
     loading_tag.id = 'marmostats-refresh-loading';
@@ -307,11 +331,27 @@ function add_refresh_button() {
 
     var image_tag = document.createElement('img');
     image_tag.src = chrome.extension.getURL('images/refresh.png');
-    button.prepend(image_tag);
-    button.onclick = function() {
+    refresh_button.prepend(image_tag);
+    refresh_button.onclick = function() {
         loading_tag.style.visibility = 'visible';
         refresh_page() 
     };
+}
+
+// toggle chart type between line and bar
+function set_chart_type(new_type) {
+    if (!chart_config || !assign_chart) return;
+
+    var new_config = jQuery.extend(true, {}, chart_config);
+    new_config.type = new_type;
+    assign_chart.destroy()
+
+    var canvas = document.getElementById('marmostats-chart-canvas')
+    var ctx = canvas.getContext('2d');
+    assign_chart = new Chart(ctx, new_config);
+    chart_config = new_config;
+
+    set_chart_size(canvas);
 }
 
 // refresh test data
@@ -444,7 +484,7 @@ function display_stats() {
                               </div> \
                               <div id="marmostats-selector-container"> \
                                 <table id="marmostats-selector-table"></table> \
-                                <div id="marmostats-refresh-container"></div> \
+                                <div id="marmostats-setting-container"></div> \
                               </div> \
                               <div id="marmostats-progress"> \
                                 <p id="marmostats-progress-text">Loading project results...</p>\

@@ -80,7 +80,7 @@ function draw_chart(test_names, test_results) {
             datasets: [{
                 label: 'Pass Rate',
                 data: test_results,
-                backgroundColor: 'rgba(122, 235, 122, 0.85)',
+                backgroundColor: 'rgba(122, 235, 122, 0.55)',
                 borderColor: 'rgba(100, 231, 100, 1.0)',
                 hoverBackgroundColor: 'rgba(100, 231, 100, 1.0)',
                 hoverBorderColor: 'rgba(100, 231, 100, 1.0)',

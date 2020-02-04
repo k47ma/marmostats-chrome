@@ -122,31 +122,33 @@ td.marmostats-selector {
     border-color: rgb(175, 175, 175) !important;
 }
 
-#marmostats-refresh-container {
+#marmostats-setting-container {
     vertical-align: bottom;
     display: inline-block;
-    margin-left: 20%;
+    margin-left: 15%;
     margin-bottom: 15px;
 }
 
-#marmostats-refresh-button {
+#marmostats-setting-container button {
     width: 100px;
     height: 30px;
     padding: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: rgba(125, 255, 125, 0.3);
+}
+
+#marmostats-setting-container button:hover {
     background-color: rgba(125, 255, 125, 0.5);
 }
 
-#marmostats-refresh-button:hover {
-    background-color: rgba(125, 255, 125, 0.8);
-}
-
-#marmostats-refresh-button img {
+#marmostats-setting-container button img {
     width: 16px;
     height: 16px;
     vertical-align: middle;
 }
 
-#marmostats-refresh-button span {
+#marmostats-setting-container button span {
     font-size: 14px;
     font-family: monospace;
     font-weight: normal;
