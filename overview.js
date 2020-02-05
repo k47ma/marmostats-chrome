@@ -106,7 +106,7 @@ function draw_chart() {
 
     var chart_canvas = document.createElement('canvas');
     chart_canvas.id = 'marmostats-chart-canvas';
-    document.querySelector('div[id="marmostats-chart"]').appendChild(chart_canvas);
+    document.getElementById('marmostats-chart').appendChild(chart_canvas);
 
     var ctx = chart_canvas.getContext('2d');
     chart_config = {
@@ -116,9 +116,9 @@ function draw_chart() {
             datasets: [{
                 label: 'Submission Rate',
                 data: submissions,
-                backgroundColor: 'rgba(30, 144, 255, 0.55)',
-                borderColor: 'rgba(30, 144, 255, 1.0)',
-                hoverBackgroundColor: 'rgba(30, 144, 255, 1.0)',
+                backgroundColor: 'rgba(30, 144, 255, 0.4)',
+                borderColor: 'rgba(30, 144, 255, 0.8)',
+                hoverBackgroundColor: 'rgba(30, 144, 255, 0.5)',
                 hoverBorderColor: 'rgba(30, 144, 255, 1.0)',
                 borderWidth: 2,
                 hoverBorderWidth: 3,
@@ -130,9 +130,9 @@ function draw_chart() {
             {
                 label: 'Avg. Score',
                 data: correctness,
-                backgroundColor: 'rgba(122, 235, 122, 0.55)',
-                borderColor: 'rgba(100, 231, 100, 1.0)',
-                hoverBackgroundColor: 'rgba(100, 231, 100, 1.0)',
+                backgroundColor: 'rgba(122, 235, 122, 0.4)',
+                borderColor: 'rgba(100, 231, 100, 0.8)',
+                hoverBackgroundColor: 'rgba(100, 231, 100, 0.5)',
                 hoverBorderColor: 'rgba(100, 231, 100, 1.0)',
                 borderWidth: 2,
                 hoverBorderWidth: 3,
@@ -307,6 +307,7 @@ function add_selectors() {
 function add_buttons() {
     var container = document.getElementById('marmostats-setting-container');
     
+    /*
     var type_button = document.createElement('button');
     type_button.id = 'marmostats-type-button';
     type_button.innerHTML = '<span>Toggle</span>';
@@ -318,6 +319,7 @@ function add_buttons() {
         }
     };
     container.appendChild(type_button);
+    */
 
     var refresh_button = document.createElement('button');
     refresh_button.id = 'marmostats-refresh-button';
@@ -342,16 +344,24 @@ function add_buttons() {
 function set_chart_type(new_type) {
     if (!chart_config || !assign_chart) return;
 
-    var new_config = jQuery.extend(true, {}, chart_config);
-    new_config.type = new_type;
-    assign_chart.destroy()
+    var chart_container = document.getElementById('marmostats-chart');
+    while (chart_container.firstChild) {
+        chart_container.removeChild(chart_container.firstChild);
+    }
 
-    var canvas = document.getElementById('marmostats-chart-canvas')
-    var ctx = canvas.getContext('2d');
+    var chart_canvas = document.createElement('canvas');
+    chart_canvas.id = 'marmostats-chart-canvas';
+    chart_container.appendChild(chart_canvas);
+
+    assign_chart.destroy();
+
+    var new_config = jQuery.extend(true, {}, chart_config);
+    var ctx = chart_canvas.getContext('2d');
     assign_chart = new Chart(ctx, new_config);
+    new_config.type = new_type;
     chart_config = new_config;
 
-    set_chart_size(canvas);
+    set_chart_size(chart_canvas);
 }
 
 // refresh test data
