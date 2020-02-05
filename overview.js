@@ -461,7 +461,6 @@ function add_test_details(total_students) {
             const detail_link = 'https://marmoset.student.cs.uwaterloo.ca/view/instructor/projectTestResults.jsp?projectPK='+project_id;
             var detail_link_tag = document.createElement('a');
             detail_link_tag.href = detail_link;
-            detail_link_tag.target = '_blank';
             var detail_image = document.createElement('img');
             detail_image.src = chrome.extension.getURL('images/chart.png');
             detail_image.title = 'View Test Details for ' + project_name;
@@ -477,6 +476,89 @@ function add_test_details(total_students) {
                 projects_displayed.push(project_name);
             }
             update_project_stats(project_name, rate_tag, score_tag, total_students);
+        }
+    }
+
+    update_table_style(project_table);
+}
+
+// update_table_style sets the style of table cells according to their contents
+function update_table_style(table) {
+    var visible_ind = -1;
+    var due_ind = -1;
+    var test_ind = -1;
+    var retest_ind = -1;
+    var setup_ind = -1;
+
+    var rows = table.getElementsByTagName('tr');
+    const titles = rows[0].getElementsByTagName('th');
+
+    for (var i = 0; i < titles.length; ++i) {
+        if (visible_ind == -1 && titles[i].innerText == 'Visible') {
+            visible_ind = i;
+        } else if (due_ind == -1 && titles[i].innerText == 'Due') {
+            due_ind = i;
+        } else if (test_ind == -1 && titles[i].innerText == '# to test') {
+            test_ind = i;
+        } else if (retest_ind == -1 && titles[i].innerText == '# retesting') {
+            retest_ind = i;
+        } else if (setup_ind == -1 && titles[i].textContent.indexOf('setup') != -1) {
+            setup_ind = i;
+        }
+    }
+
+    for (var i = 1; i < rows.length; ++i) {
+        if (!(rows[i].classList.contains('r0') || rows[i].classList.contains('r1'))) {
+            continue;
+        }
+
+        if (visible_ind != -1 && visible_ind < rows[i].children.length) {
+            var visible_cell = rows[i].children[visible_ind];
+            if (visible_cell.innerText === 'true') {
+                visible_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
+            } else {
+                visible_cell.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
+            }
+        }
+
+        if (due_ind != -1 && due_ind < rows[i].children.length) {
+            var due_cell = rows[i].children[due_ind];
+            const due_time = Date.parse(due_cell.innerText);
+            const current_time = Date.now();
+            if (!due_time) {
+                due_cell.style.backgroundColor = 'rgba(255, 213, 0, 0.25)';
+            } else if (due_time < current_time) {
+                due_cell.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
+            } else {
+                due_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
+            }
+        }
+
+        if (test_ind != -1 && test_ind < rows[i].children.length) {
+            var test_cell = rows[i].children[test_ind];
+            if (test_cell.innerText != '0') {
+                test_cell.style.backgroundColor = 'rgba(255, 255, 0, 0.6)';
+            } else {
+                test_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
+            }
+        }
+
+        if (retest_ind != -1 && retest_ind < rows[i].children.length) {
+            var retest_cell = rows[i].children[retest_ind];
+            if (retest_cell.innerText != '0') {
+                retest_cell.style.backgroundColor = 'rgba(255, 255, 0, 0.6)';
+            } else {
+                retest_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
+            }
+        }
+
+        if (setup_ind != -1 && setup_ind < rows[i].children.length) {
+            var setup_cell = rows[i].children[setup_ind];
+            if (setup_cell.textContent.indexOf('inactive') != -1) {
+                setup_cell.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
+            } else {
+                setup_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
+            }
         }
     }
 }

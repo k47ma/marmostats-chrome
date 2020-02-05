@@ -176,9 +176,9 @@ td.marmostats-selector {
 }
 
 .marmostats-selector.selected {
-    background-color: rgba(145, 238, 145, 0.8);
+    background-color: rgba(145, 238, 145, 0.5);
 }
 
 .marmostats-selector.selected:hover {
-    background-color: rgba(145, 238, 145, 1.0);
+    background-color: rgba(145, 238, 145, 0.8);
 }

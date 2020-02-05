@@ -220,6 +220,69 @@ function display_overview() {
     }
 }
 
+// change styles for page elements
+function set_page_styles() {
+    var due_text = '';
+    var due_time = null;
+
+    // set background color for deadline text
+    for (var tag of document.getElementsByTagName('p')) {
+        if (tag.textContent.startsWith('Deadline')) {
+            var text_node = tag.childNodes[1];
+            due_text = text_node.textContent.replace(/(\r\n|\n|\r)|at/gm, '');
+            due_time = Date.parse(due_text);
+            const current_time = Date.now();
+            var text_tag = document.createElement('span');
+            text_tag.innerText = text_node.textContent.replace(/(\r\n|\n|\r)/gm, '');;
+            text_node.replaceWith(text_tag);
+            if (!due_time) {
+                text_tag.style.backgroundColor = 'rgba(255, 213, 0, 0.5)';
+            } else if (due_time < current_time) {
+                text_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.5)';
+            } else {
+                text_tag.style.backgroundColor = 'rgba(122, 235, 122, 0.5)';
+            }
+            break;
+        }
+    }
+
+    if (!due_text) return;
+
+    // set background color for table contents
+    var result_table = document.querySelector('[title="projectTestResults"]');
+    var submission_ind = -1;
+    var rows = result_table.getElementsByTagName('tr');
+    const titles = rows[0].getElementsByTagName('th');
+
+    for (var i = 0; i < titles.length; ++i) {
+        if (submission_ind == -1 && titles[i].textContent === 'submitted at') {
+            submission_ind = i;
+        } else if (submission_ind != -1) {
+            break;
+        }
+    }
+
+    for (var i = 2; i < rows.length; ++i) {
+        if (!(rows[i].classList.contains('r0') || rows[i].classList.contains('r1'))) {
+            continue;
+        }
+
+        if (submission_ind != -1 && submission_ind < rows[i].children.length) {
+            var submission_cell = rows[i].children[submission_ind];
+            const year = new Date().getFullYear();
+            const submission_text = submission_cell.textContent.replace(/(\r\n|\n|\r)|at/gm, '') + ' ' + year;
+            const submission_time = Date.parse(submission_text);
+            if (!submission_time || !due_time) {
+                submission_cell.style.backgroundColor = 'rgba(255, 213, 0, 0.25)';
+            } else if (due_time < submission_time) {
+                submission_cell.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
+            } else {
+                submission_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
+            }
+        }
+    }
+}
+
 // display stats for all test cases
 function display_stats() {
     // setup html tags for showing results
@@ -246,6 +309,7 @@ function display_stats() {
     }
 
     display_overview();
+    set_page_styles();
 }
 
 $(document).ready(function() {
