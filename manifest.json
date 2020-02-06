@@ -21,7 +21,8 @@
         "css": ["css/marmoset_stats.css"]
       }
     ],
-    "web_accessible_resources": ["images/loading.gif", "images/refresh.png", "images/chart.png"],
+    "web_accessible_resources": ["images/loading.gif", "images/refresh.png",
+                                 "images/bar-chart.png", "images/line-chart.png"],
     "permissions": ["tabs"],
     "browser_action": {
       "default_icon": {

@@ -262,7 +262,7 @@ function add_selectors() {
                         projects_displayed.push(project_name);
                     }
                 }
-                
+
                 var all_selected = true;
                 for (const check_selector of selectors) {
                     if (!check_selector.classList.contains('selected')) {
@@ -306,7 +306,7 @@ function add_selectors() {
 // add refresh button after selector table
 function add_buttons() {
     var container = document.getElementById('marmostats-setting-container');
-    
+
     /*
     var type_button = document.createElement('button');
     type_button.id = 'marmostats-type-button';
@@ -336,7 +336,7 @@ function add_buttons() {
     refresh_button.prepend(image_tag);
     refresh_button.onclick = function() {
         loading_tag.style.visibility = 'visible';
-        refresh_page() 
+        refresh_page()
     };
 }
 
@@ -369,13 +369,13 @@ function refresh_page() {
     $.get(current_url, function(response) {
         var doc = document.createElement('html');
         doc.innerHTML = response;
-        
+
         var result_table = doc.getElementsByTagName('table')[0];
         result_table.classList.add('marmostats-overview-table');
-        
+
         var current_table = document.getElementsByClassName('marmostats-overview-table')[0];
         current_table.parentNode.replaceChild(result_table, current_table);
-        
+
         display_overview();
     });
 }
@@ -455,6 +455,7 @@ function add_test_details(total_students) {
 
             var image_tag_1 = document.createElement('img');
             image_tag_1.src = chrome.extension.getURL('images/loading.gif');
+            image_tag_1.style.width = '18px';
             image_tag_1.style.height = '18px';
             var image_tag_2 = image_tag_1.cloneNode(true);
 
@@ -462,8 +463,9 @@ function add_test_details(total_students) {
             var detail_link_tag = document.createElement('a');
             detail_link_tag.href = detail_link;
             var detail_image = document.createElement('img');
-            detail_image.src = chrome.extension.getURL('images/chart.png');
+            detail_image.src = chrome.extension.getURL('images/bar-chart.png');
             detail_image.title = 'View Test Details for ' + project_name;
+            detail_image.style.width = '18px';
             detail_image.style.height = '18px';
             detail_link_tag.appendChild(detail_image);
 
@@ -489,6 +491,7 @@ function update_table_style(table) {
     var test_ind = -1;
     var retest_ind = -1;
     var setup_ind = -1;
+    var overview_ind = -1;
 
     var rows = table.getElementsByTagName('tr');
     const titles = rows[0].getElementsByTagName('th');
@@ -504,10 +507,14 @@ function update_table_style(table) {
             retest_ind = i;
         } else if (setup_ind == -1 && titles[i].textContent.indexOf('setup') != -1) {
             setup_ind = i;
+        } else if (overview_ind == -1 && titles[i].innerText == 'Overview') {
+            overview_ind = i;
         }
     }
 
     for (var i = 1; i < rows.length; ++i) {
+        const project_name = rows[i].children[0].innerText;
+
         if (!(rows[i].classList.contains('r0') || rows[i].classList.contains('r1'))) {
             continue;
         }
@@ -559,6 +566,18 @@ function update_table_style(table) {
             } else {
                 setup_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
             }
+        }
+
+        if (overview_ind != -1 && overview_ind < rows[i].children.length) {
+            var overview_cell = rows[i].children[overview_ind];
+            var link_tag = overview_cell.getElementsByTagName('a')[0];
+            link_tag.innerText = '';
+            var image_tag = document.createElement('img');
+            image_tag.src = chrome.extension.getURL('images/line-chart.png');
+            image_tag.title = 'Overview for ' + project_name;
+            image_tag.style.width = '18px';
+            image_tag.style.height = '18px';
+            link_tag.appendChild(image_tag);
         }
     }
 }
