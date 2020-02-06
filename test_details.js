@@ -4,7 +4,7 @@ const key = "97a591e399f591e64a5f4536d08d9574";
 
 // update the number of total students and students who have submitted
 function update_total_students(subject, catalog) {
-    var result_table = document.querySelector('[title="projectTestResults"]');
+    var result_table = document.getElementById('marmostats-result-table');
     const termlist_url = "https://api.uwaterloo.ca/v2/terms/list.json?key="+key;
     var total_students = 0;
     var total_submissions = 0;
@@ -148,7 +148,6 @@ function parse_result_table(result_table) {
     const titles = rows[0].getElementsByTagName('th');
 
     var public_index = -1;
-    var secret_index = -1;
     var score_index = -1;
     var total_public_tests = 0;
     var total_secret_tests = 0;
@@ -160,8 +159,7 @@ function parse_result_table(result_table) {
             total_public_tests = Number(titles[i].getAttribute('colspan'));
         }
 
-        if (secret_index == -1 && titles[i].textContent == "Secret") {
-            secret_index = i;
+        if (total_secret_tests == 0 && titles[i].textContent == "Secret") {
             total_secret_tests = Number(titles[i].getAttribute('colspan'));
         }
 
@@ -183,22 +181,46 @@ function parse_result_table(result_table) {
 
     // parse test results
     var test_names = new Array();
+    var test_fullnames = new Array();
     var test_results = new Array();
 
-    for (i = 0; i < total_public_tests; ++i) {
+    for (i = 0; i < total_public_tests + total_secret_tests; ++i) {
+        var testname;
+        if (i < total_public_tests) {
+            testname = 'P' + i.toString();
+        } else {
+            testname = 'S' + (i - total_public_tests).toString();
+        }
+        var test_title_container = rows[1].children[i];
+        test_title_container.classList.add('marmostats-tooltip-container');
         const passed_ratio = parse_test_result(result_table, i, public_index + i);
-        test_names.push('P' + i.toString());
-        test_results.push(passed_ratio);
-    }
+        const test_title_tag = test_title_container.getElementsByTagName('a')[0];
+        const test_fullname = test_title_tag.getAttribute('title');
 
-    for (i = 0; i < total_secret_tests; ++i) {
-        const passed_ratio = parse_test_result(result_table, i + total_public_tests,
-                                               public_index + total_public_tests + i);
-        test_names.push('S' + i.toString());
+        test_names.push(testname);
+        test_fullnames.push(test_fullname);
+        test_title_tag.removeAttribute('title');
         test_results.push(passed_ratio);
+
+        add_tooltip(test_title_container, test_fullname);
     }
 
     draw_chart(test_names, test_results);
+}
+
+// add tooltip to the given element
+function add_tooltip(target, content) {
+    var tooltip = document.createElement('span');
+    tooltip.innerHTML = content;
+    tooltip.classList.add('marmostats-tooltip');
+
+    target.appendChild(tooltip);
+    target.addEventListener('mouseenter', function(e) {
+        tooltip.style.visibility = 'visible';
+    });
+    target.addEventListener('mouseleave', function(e) {
+        tooltip.style.visibility = 'hidden';
+    })
 }
 
 // display an overview above the result table
@@ -249,7 +271,7 @@ function set_page_styles() {
     if (!due_text) return;
 
     // set background color for table contents
-    var result_table = document.querySelector('[title="projectTestResults"]');
+    var result_table = document.getElementById('marmostats-result-table');
     var submission_ind = -1;
     var rows = result_table.getElementsByTagName('tr');
     const titles = rows[0].getElementsByTagName('th');
@@ -286,7 +308,9 @@ function set_page_styles() {
 // display stats for all test cases
 function display_stats() {
     // setup html tags for showing results
-    var result_table = document.querySelector('[title="projectTestResults"]');
+    var result_table = document.getElementsByTagName('table')[0];
+    result_table.id = 'marmostats-result-table'
+    result_table.removeAttribute('title');
     var overview_tag = document.createElement('div');
     overview_tag.id = 'marmostats-overview';
     overview_tag.innerHTML = '<div id="marmostats-test-summary"></div><div id="marmostats-chart"></div>';
