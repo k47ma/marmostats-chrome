@@ -2,19 +2,24 @@
     "name": "MarmoStats",
     "short_name": "MarmoStats",
     "description": "A Chrome Extension for visualizing Marmoset test results",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "manifest_version": 2,
     "content_scripts": [
-        {
-          "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/projectTestResults.jsp*"],
-          "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "test_details.js"],
-          "css": ["css/marmoset_stats.css"]
-        },
-        {
-          "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/course.jsp*"],
-          "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "overview.js"],
-          "css": ["css/marmoset_stats.css"]
-        }
+      {
+        "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/course.jsp*"],
+        "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "homepage.js"],
+        "css": ["css/marmoset_stats.css"]
+      },
+      {
+        "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/projectTestResults.jsp*"],
+        "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "test_details.js"],
+        "css": ["css/marmoset_stats.css"]
+      },
+      {
+        "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/project.jsp*"],
+        "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "overview.js"],
+        "css": ["css/marmoset_stats.css"]
+      }
     ],
     "web_accessible_resources": ["images/loading.gif", "images/refresh.png", "images/chart.png"],
     "permissions": ["tabs"],

@@ -1,4 +1,4 @@
-/* Script for parsing test details. */
+/* Script for parsing test details */
 
 const key = "97a591e399f591e64a5f4536d08d9574";
 
@@ -80,9 +80,9 @@ function draw_chart(test_names, test_results) {
             datasets: [{
                 label: 'Pass Rate',
                 data: test_results,
-                backgroundColor: 'rgba(122, 235, 122, 0.4)',
+                backgroundColor: 'rgba(122, 235, 122, 0.5)',
                 borderColor: 'rgba(100, 231, 100, 0.8)',
-                hoverBackgroundColor: 'rgba(100, 231, 100, 0.5)',
+                hoverBackgroundColor: 'rgba(100, 231, 100, 0.65)',
                 hoverBorderColor: 'rgba(100, 231, 100, 1.0)',
                 borderWidth: 1,
                 hoverBorderWidth: 2,
@@ -153,7 +153,7 @@ function parse_result_table(result_table) {
     var total_public_tests = 0;
     var total_secret_tests = 0;
 
-    for (i = 0; i < total_cols; ++i) {
+    for (var i = 0; i < total_cols; ++i) {
         const children_tags = titles[i].children;
         if (public_index == -1 && titles[i].textContent == "Public") {
             public_index = i;
@@ -173,7 +173,7 @@ function parse_result_table(result_table) {
     // parse scores
     var test_scores = new Array();
     if (score_index != -1) {
-        for (i = 2; i < rows.length; ++i) {
+        for (var i = 2; i < rows.length; ++i) {
             test_scores.push(parseInt(rows[i].children[score_index].innerText));
         }
     }
