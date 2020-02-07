@@ -111,7 +111,7 @@ function draw_chart() {
 
     var ctx = chart_canvas.getContext('2d');
     chart_config = {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: projects_displayed,
             datasets: [{
