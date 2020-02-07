@@ -214,6 +214,41 @@ function set_page_styles() {
             break;
         }
     }
+
+    if (!due_text) return;
+
+    // set background color for table contents
+    var result_table = document.getElementById('marmostats-project-table');
+    var submission_ind = -1;
+    var rows = result_table.getElementsByTagName('tr');
+    const titles = rows[0].getElementsByTagName('th');
+
+    for (var i = 0; i < titles.length; ++i) {
+        if (submission_ind == -1 && titles[i].textContent === 'last submission') {
+            submission_ind = i;
+            break;
+        }
+    }
+
+    for (var i = 1; i < rows.length; ++i) {
+        if (!(rows[i].classList.contains('r0') || rows[i].classList.contains('r1'))) {
+            continue;
+        }
+
+        if (submission_ind != -1 && submission_ind < rows[i].children.length) {
+            var submission_cell = rows[i].children[submission_ind];
+            const year = new Date().getFullYear();
+            const submission_text = submission_cell.textContent.replace(/(\r\n|\n|\r)|at/gm, '') + ' ' + year;
+            const submission_time = Date.parse(submission_text);
+            if (!submission_time || !due_time) {
+                submission_cell.style.backgroundColor = 'rgba(255, 213, 0, 0.25)';
+            } else if (due_time < submission_time) {
+                submission_cell.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
+            } else {
+                submission_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
+            }
+        }
+    }
 }
 
 // add links for previous and next project

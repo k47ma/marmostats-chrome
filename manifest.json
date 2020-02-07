@@ -8,7 +8,7 @@
       {
         "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/course.jsp*"],
         "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "homepage.js"],
-        "css": ["css/marmoset_stats.css"]
+        "css": ["css/marmoset_stats.css", "css/toggle.css"]
       },
       {
         "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/projectTestResults.jsp*"],

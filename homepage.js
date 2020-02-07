@@ -6,6 +6,7 @@ const current_url = window.location.href;
 var assign_chart = null;
 var chart_config = null;
 var load_finished = false;
+var timeout = null;
 
 var projects = new Object();
 var projects_displayed = new Array();
@@ -307,19 +308,50 @@ function add_selectors() {
 function add_buttons() {
     var container = document.getElementById('marmostats-setting-container');
 
-    /*
-    var type_button = document.createElement('button');
-    type_button.id = 'marmostats-type-button';
-    type_button.innerHTML = '<span>Toggle</span>';
-    type_button.onclick = function() {
-        if (chart_config['type'] == 'line') {
-            set_chart_type('bar');
-        } else {
-            set_chart_type('line');
+    var autorefresh_container = document.createElement('div');
+    autorefresh_container.id = 'marmostats-autorefresh-container';
+    autorefresh_container.innerHTML = '<p>Auto-refresh: </p>';
+    container.appendChild(autorefresh_container);
+
+    var autorefresh_button = document.createElement('span');
+    autorefresh_button.id = 'marmostats-autorefresh-button';
+    autorefresh_button.innerHTML = '<input type="checkbox" id="marmostats-toggle-button" class="cbx hidden"/> \
+                                    <label for="marmostats-toggle-button" class="lbl"></label><br /> \
+                                    <p>Interval: </p> \
+                                    <input id="marmostats-autorefresh-input" type="text" name="autorefresh-input" value="1"> \
+                                    <p>min</p>';
+    autorefresh_container.appendChild(autorefresh_button);
+
+    var checkbox = document.getElementById('marmostats-toggle-button');
+    autorefresh_button.onchange = function(e) {
+        if (checkbox.checked) {
+            var input_tag = document.getElementById('marmostats-autorefresh-input');
+            const interval = parseFloat(input_tag.value);
+            if (isNaN(interval) || interval < 0.1) {
+                input_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
+                checkbox.checked = false;
+                if (timeout) {
+                    clearInterval(timeout);
+                }
+                return;
+            } else {
+                input_tag.style.backgroundColor = 'rgb(255, 255, 255)';
+            }
+            timeout = setInterval(function() {
+                refresh_page(true)
+            }, interval * 60 * 1000);
+        } else if (timeout) {
+            clearInterval(timeout);
         }
     };
-    container.appendChild(type_button);
-    */
+    
+
+    var input_box = document.getElementById('marmostats-autorefresh-input');
+    input_box.onkeydown = function(e) {
+        if (e.key == 'Enter') {
+            checkbox.checked = true;
+        }
+    }
 
     var refresh_button = document.createElement('button');
     refresh_button.id = 'marmostats-refresh-button';
@@ -336,7 +368,7 @@ function add_buttons() {
     refresh_button.prepend(image_tag);
     refresh_button.onclick = function() {
         loading_tag.style.visibility = 'visible';
-        refresh_page()
+        refresh_page(false)
     };
 }
 
@@ -365,7 +397,7 @@ function set_chart_type(new_type) {
 }
 
 // refresh test data
-function refresh_page() {
+function refresh_page(autorefresh) {
     $.get(current_url, function(response) {
         var doc = document.createElement('html');
         doc.innerHTML = response;

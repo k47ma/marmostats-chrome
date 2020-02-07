@@ -279,7 +279,6 @@ function set_page_styles() {
     for (var i = 0; i < titles.length; ++i) {
         if (submission_ind == -1 && titles[i].textContent === 'submitted at') {
             submission_ind = i;
-        } else if (submission_ind != -1) {
             break;
         }
     }

@@ -88,6 +88,10 @@ li {
     display: inline;
 }
 
+.marmostats-right {
+    float: right;
+}
+
 #marmostats-total-students {
     font-size: 18px;
     font-family: monospace;
@@ -154,6 +158,7 @@ li {
     margin-left: 40px;
     display: inline-block;
     visibility: collapse;
+    vertical-align: top;
 }
 
 #marmostats-selector-table th {
@@ -183,7 +188,7 @@ li {
 #marmostats-setting-container {
     vertical-align: bottom;
     display: inline-block;
-    margin-left: 15%;
+    margin-left: 50px;
     margin-bottom: 15px;
 }
 
@@ -191,7 +196,7 @@ li {
     width: 100px;
     height: 30px;
     padding: 5px;
-    margin-left: 10px;
+    margin-left: 60px;
     margin-right: 10px;
     background-color: rgba(125, 255, 125, 0.3);
 }
@@ -211,6 +216,7 @@ li {
     font-family: monospace;
     font-weight: normal;
     margin-left: 5px;
+    margin-bottom: 0px;
     padding: 0px;
     margin-block-start: 0px;
     margin-block-end: 0px;
@@ -224,8 +230,37 @@ li {
     margin-left: 10px;
 }
 
+#marmostats-autorefresh-container {
+    display: inline-block;
+    width: auto;
+    padding: 5px;
+    vertical-align: middle;
+}
+
+#marmostats-autorefresh-container label {
+    margin-left: 25px;
+}
+
+#marmostats-autorefresh-container p {
+    font-family: monospace;
+    font-size: 14px;
+    margin-right: 5px;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#marmostats-autorefresh-input {
+    width: 40px;
+    margin-top: 10px;
+    margin-left: 18px;
+    margin-right: 2px;
+}
+
 #marmostats-neighbour-link-container {
     padding-left: 40px;
+    width: 50px;
     height: 30px;
     display: inline-block;
 }
