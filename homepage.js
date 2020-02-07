@@ -6,7 +6,7 @@ const current_url = window.location.href;
 var assign_chart = null;
 var chart_config = null;
 var load_finished = false;
-var timeout = null;
+var interval = null;
 
 var projects = new Object();
 var projects_displayed = new Array();
@@ -330,18 +330,18 @@ function add_buttons() {
             if (isNaN(interval) || interval < 0.1) {
                 input_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
                 checkbox.checked = false;
-                if (timeout) {
-                    clearInterval(timeout);
+                if (interval) {
+                    clearInterval(interval);
                 }
                 return;
             } else {
                 input_tag.style.backgroundColor = 'rgb(255, 255, 255)';
             }
-            timeout = setInterval(function() {
+            interval = setInterval(function() {
                 refresh_page(true)
             }, interval * 60 * 1000);
-        } else if (timeout) {
-            clearInterval(timeout);
+        } else if (interval) {
+            clearInterval(interval);
         }
     };
     

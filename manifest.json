@@ -19,6 +19,11 @@
         "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/project.jsp*"],
         "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "overview.js"],
         "css": ["css/marmoset_stats.css"]
+      },
+      {
+        "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/studentProject.jsp?*"],
+        "js": ["lib/jquery-3.4.1.min.js", "submission.js"],
+        "css": ["css/marmoset_stats.css"]
       }
     ],
     "web_accessible_resources": ["images/loading.gif", "images/refresh.png",
