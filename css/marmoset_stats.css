@@ -49,7 +49,7 @@ li {
     z-index: 1;
     left: 25%;
     bottom: 100%;
-    margin-top: 10px;
+    margin-bottom: 5px;
     margin-left: -50px;
 }
 
@@ -62,6 +62,30 @@ li {
     border-width: 5px;
     border-style: solid;
     border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+}
+
+.marmostats-selector {
+    background-color: none;
+    cursor: pointer;
+}
+
+.marmostats-selector:hover {
+    background-color: rgba(145, 238, 145, 0.3);
+}
+
+.marmostats-selector.selected {
+    background-color: rgba(145, 238, 145, 0.5);
+}
+
+.marmostats-selector.selected:hover {
+    background-color: rgba(145, 238, 145, 0.8);
+}
+
+.marmostats-neighbor-link {
+    font-size: 20px;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+    display: inline;
 }
 
 #marmostats-total-students {
@@ -200,19 +224,13 @@ li {
     margin-left: 10px;
 }
 
-.marmostats-selector {
-    background-color: none;
-    cursor: pointer;
+#marmostats-neighbour-link-container {
+    padding-left: 40px;
+    height: 30px;
+    display: inline-block;
 }
 
-.marmostats-selector:hover {
-    background-color: rgba(145, 238, 145, 0.3);
-}
-
-.marmostats-selector.selected {
-    background-color: rgba(145, 238, 145, 0.5);
-}
-
-.marmostats-selector.selected:hover {
-    background-color: rgba(145, 238, 145, 0.8);
+#marmostats-next-project {
+    float: right;
+    right: 0px;
 }

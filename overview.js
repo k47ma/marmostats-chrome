@@ -141,9 +141,26 @@ function parse_result_table(result_table) {
     var test_scores = new Array();
     if (score_index != -1) {
         for (var i = 1; i < rows.length; ++i) {
-            const score_texts = rows[i].children[score_index].innerText.split('/');
-            const score = score_texts.reduce((a, b) => parseInt(a) + parseInt(b), 0);
-            test_scores.push(score);
+            const score_texts1 = rows[i].children[score_index].innerText.split('/');
+            const score1 = score_texts1.reduce((a, b) => parseInt(a) + parseInt(b), 0);
+            if (!isNaN(score1)) {
+                test_scores.push(score1);
+                continue;
+            }
+
+            const score_texts2 = rows[i].children[score_index+1].innerText.split('/');
+            const score2 = score_texts2.reduce((a, b) => parseInt(a) + parseInt(b), 0);
+            if (!isNaN(score2)) {
+                test_scores.push(score2);
+                continue;
+            }
+
+            const score_texts3 = rows[i].children[score_index+2].innerText.split('/');
+            const score3 = score_texts3.reduce((a, b) => parseInt(a) + parseInt(b), 0);
+            if (!isNaN(score3)) {
+                test_scores.push(score3);
+                continue;
+            }
         }
     }
 
@@ -199,6 +216,102 @@ function set_page_styles() {
     }
 }
 
+// add links for previous and next project
+function add_neighbor_links() {
+    var overview_container = document.getElementById('marmostats-overview');
+    var links_container = document.createElement('div');
+    const table_width = document.getElementById('marmostats-project-table').clientWidth;
+    links_container.style.width = table_width - 15;
+    links_container.id = 'marmostats-neighbour-link-container';
+    overview_container.appendChild(links_container);
+
+    const overview_tag = document.getElementsByClassName('breadcrumb')[0];
+    const regex = /[A-Z]+[0-9]+/g;
+    var homepage_link = '';
+    for (var link_tag of overview_tag.getElementsByTagName('a')) {
+        const match_result = link_tag.innerText.match(regex);
+        if (match_result) {
+            homepage_link = link_tag.href;
+        }
+    }
+
+    if (!homepage_link) return;
+
+    $.get(homepage_link, function(response) {
+        var doc = document.createElement('html');
+        doc.innerHTML = response;
+        const result_table = doc.getElementsByTagName('table')[0];
+        const rows = result_table.getElementsByTagName('tr');
+
+        var project_info = new Array();
+        var project_ind = -1;
+        for (var i = 1; i < rows.length; ++i) {
+            if (rows[i].children[0].getAttribute('colspan')) {
+                continue;
+            }
+
+            const project_name = rows[i].children[0].innerText;
+            const overview_link = rows[i].children[1].getElementsByTagName('a')[0].href;
+            const project_id = overview_link.split('=')[1];
+            const test_detail_link = 'https://marmoset.student.cs.uwaterloo.ca/view/instructor/projectTestResults.jsp?projectPK='+project_id;
+            project_info.push({name: project_name, test_detail: test_detail_link, overview: overview_link});
+        }
+
+        project_info.sort(function(a, b) { 
+            if (a.name < b.name) {
+                return -1;
+            } else if (a.name > b.name) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        for (var i = 0; i < project_info.length; ++i) {
+            if (window.location.href == project_info[i].test_detail ||
+                window.location.href == project_info[i].overview) {
+                project_ind = i;
+            }
+        }
+
+        if (project_ind == -1) return;
+
+        // add prev project link
+        if (project_ind != 0) {
+            var prev_project_tag = document.createElement('a');
+            const prev_project_link = project_info[project_ind-1].overview;
+            prev_project_tag.id = 'marmostats-prev-project';
+            prev_project_tag.classList.add('marmostats-neighbor-link');
+            prev_project_tag.innerText = '<< ' + project_info[project_ind-1].name;
+            prev_project_tag.href = prev_project_link;
+            links_container.appendChild(prev_project_tag);
+        } else {
+            var prev_project_tag = document.createElement('p');
+            prev_project_tag.id = 'marmostats-prev-project';
+            prev_project_tag.classList.add('marmostats-neighbor-link');
+            prev_project_tag.innerText = "No previous project";
+            links_container.appendChild(prev_project_tag);
+        }
+
+        // add next project link
+        if (project_ind != project_info.length - 1) {
+            var next_project_tag = document.createElement('a');
+            const next_project_link = project_info[project_ind+1].overview;
+            next_project_tag.id = 'marmostats-next-project';
+            next_project_tag.classList.add('marmostats-neighbor-link');
+            next_project_tag.innerText = project_info[project_ind+1].name + ' >>';
+            next_project_tag.href = next_project_link;
+            links_container.appendChild(next_project_tag);
+        } else {
+            var next_project_tag = document.createElement('p');
+            next_project_tag.id = 'marmostats-next-project';
+            next_project_tag.classList.add('marmostats-neighbor-link');
+            next_project_tag.innerText = "No next project";
+            links_container.appendChild(next_project_tag);
+        }
+    });
+}
+
 // display stats for all test cases
 function display_stats() {
     // setup html tags for showing results
@@ -227,6 +340,7 @@ function display_stats() {
 
     display_overview();
     set_page_styles();
+    add_neighbor_links();
 }
 
 $(document).ready(function() {
