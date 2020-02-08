@@ -6,7 +6,7 @@ var refresh_time = 5;
 const current_url = window.location.href;
 
 // refresh the submission table and check not tested again
-function refresh_table() { 
+function refresh_table() {
     $.get(current_url, function(response) {
         var doc = document.createElement('html');
         doc.innerHTML = response;
@@ -17,7 +17,7 @@ function refresh_table() {
 
         check_not_tested();
     });
-} 
+}
 
 // count down until 0 seconds, and then refresh the page
 function refresh_countdown(refresh_tags, time_left) {
@@ -29,7 +29,7 @@ function refresh_countdown(refresh_tags, time_left) {
         refresh_table();
     } else {
         setTimeout(function() {
-            refresh_countdown(refresh_tags, time_left - 1)
+            refresh_countdown(refresh_tags, time_left - 1);
         }, 1000);
     }
 }

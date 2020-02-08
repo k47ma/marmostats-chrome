@@ -5,6 +5,8 @@ const latest_sub_ind = 3;
 const latest_result_ind = 4;
 const max_result_ind = 5;
 
+const refresh_time = 5;
+
 // create a new loading image tag
 function make_loading_image() {
     var image_tag = document.createElement('img');
@@ -49,6 +51,19 @@ function is_all_passed(row, test_ind) {
         }
     }
     return true;
+}
+
+// count down until 0 seconds, and then refresh the page
+function refresh_countdown(refresh_tag, time_left, callback) {
+    refresh_tag.innerText = 'not tested yet (' + time_left + ')';
+
+    if (time_left == 0) {
+        callback();
+    } else {
+        setTimeout(function() {
+            refresh_countdown(refresh_tag, time_left - 1, callback);
+        }, 1000);
+    }
 }
 
 // load project statistics
@@ -134,6 +149,13 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             } else {
                 max_result_tag.style.backgroundColor = 'rgba(255, 213, 0, 0.5)';
             }
+
+            if (latest_result == 'not tested yet') {
+                refresh_countdown(latest_result_tag, refresh_time, function() {
+                    update_project_stats(project_url, total_sub_tag, latest_sub_tag,
+                                         latest_result_tag, max_result_tag)
+                });
+            }
         }
     });
 }
@@ -143,7 +165,7 @@ function display_results() {
     var student_table = document.getElementsByTagName('table')[0];
     student_table.id = 'marmostats-student-table';
     var rows = student_table.getElementsByTagName('tr');
-    
+
     var total_sub_title = document.createElement('th');
     total_sub_title.innerHTML = '#<br />subs';
     rows[0].insertBefore(total_sub_title, rows[0].children[total_sub_ind]);
