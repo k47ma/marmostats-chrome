@@ -2,7 +2,7 @@
     "name": "MarmoStats",
     "short_name": "MarmoStats",
     "description": "A Chrome Extension for visualizing Marmoset test results",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "manifest_version": 2,
     "content_scripts": [
       {
@@ -23,6 +23,11 @@
       {
         "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/studentProject.jsp?*"],
         "js": ["lib/jquery-3.4.1.min.js", "submission.js"],
+        "css": ["css/marmoset_stats.css"]
+      },
+      {
+        "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/student.jsp?*"],
+        "js": ["lib/jquery-3.4.1.min.js", "student.js"],
         "css": ["css/marmoset_stats.css"]
       }
     ],
