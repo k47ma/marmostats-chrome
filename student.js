@@ -43,6 +43,11 @@ function sum_results(results) {
     return score_list.reduce((a, b) => parseInt(a) + parseInt(b), 0);
 }
 
+// removes newline characters in string
+function remove_newlines(s) {
+    return s.replace(/(\r\n|\n|\r)|at/gm, '');
+}
+
 // check all pass results
 function is_all_passed(row, test_ind) {
     for (var curr_test = test_ind; curr_test < row.children.length; ++curr_test) {
@@ -103,9 +108,15 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             max_result_tag.innerHTML = '-';
         } else {
             const due_date = parse_due_date(doc);
+            const latest_link = rows[2].children[result_ind].children[0].href;
+
             const latest_sub = rows[2].children[sub_ind].innerText;
             const latest_time = Date.parse(latest_sub);
-            latest_sub_tag.innerHTML = latest_sub;
+            const latest_tag = document.createElement('a');
+            latest_tag.innerText = latest_sub;
+            latest_tag.href = latest_link;
+            latest_sub_tag.innerHTML = '';
+            latest_sub_tag.appendChild(latest_tag);
             if (latest_time < due_date) {
                 latest_sub_tag.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
             } else {
@@ -113,7 +124,11 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             }
 
             const latest_result = rows[2].children[result_ind].innerText;
-            latest_result_tag.innerHTML = latest_result;
+            const latest_result_link = document.createElement('a');
+            latest_result_link.innerText = remove_newlines(latest_result);
+            latest_result_link.href = latest_link;
+            latest_result_tag.innerHTML = '';
+            latest_result_tag.appendChild(latest_result_link);
             if (latest_result == 'not tested yet') {
                 latest_result_tag.style.backgroundColor = 'rgba(30, 144, 255, 0.25)';
             } else if (latest_result == 'did not compile') {
@@ -126,6 +141,7 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
 
             var max_result = latest_result;
             var max_score = sum_results(latest_result);
+            var max_link = latest_link;
             var all_test_passed = false;
             for (var i = 2; i < rows.length; ++i) {
                 const result = rows[i].children[result_ind].innerText;
@@ -137,9 +153,14 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
                 if (score > max_score) {
                     max_score = score;
                     max_result = result;
+                    max_link = rows[i].children[result_ind].children[0].href;
                 }
             }
-            max_result_tag.innerHTML = max_result;
+            const max_result_link = document.createElement('a');
+            max_result_link.innerText = remove_newlines(max_result);
+            max_result_link.href = max_link;
+            max_result_tag.innerHTML = '';
+            max_result_tag.appendChild(max_result_link);
             if (max_result == 'not tested yet') {
                 max_result_tag.style.backgroundColor = 'rgba(30, 144, 255, 0.25)';
             } else if (max_result == 'did not compile') {

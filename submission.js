@@ -5,6 +5,11 @@ var refresh_time = 5;
 
 const current_url = window.location.href;
 
+// removes newline characters in string
+function remove_newlines(s) {
+    return s.replace(/(\r\n|\n|\r)|at/gm, '');
+}
+
 // refresh the submission table and check not tested again
 function refresh_table() {
     $.get(current_url, function(response) {
@@ -99,7 +104,7 @@ function set_page_styles() {
             due_time = Date.parse(due_text);
             const current_time = Date.now();
             var text_tag = document.createElement('span');
-            text_tag.innerText = text_node.textContent.replace(/(\r\n|\n|\r)/gm, '');;
+            text_tag.innerText = remove_newlines(text_node.textContent);
             text_node.replaceWith(text_tag);
             if (!due_time) {
                 text_tag.style.backgroundColor = 'rgba(255, 213, 0, 0.5)';
@@ -135,7 +140,7 @@ function set_page_styles() {
         if (submission_ind != -1 && submission_ind < rows[i].children.length) {
             var submission_cell = rows[i].children[submission_ind];
             const year = new Date().getFullYear();
-            const submission_text = submission_cell.textContent.replace(/(\r\n|\n|\r)|at/gm, '') + ' ' + year;
+            const submission_text = remove_newlines(submission_cell.textContent) + ' ' + year;
             const submission_time = Date.parse(submission_text);
             if (!submission_time || !due_time) {
                 submission_cell.style.backgroundColor = 'rgba(255, 213, 0, 0.25)';
