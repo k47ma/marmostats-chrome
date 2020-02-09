@@ -7,6 +7,7 @@ var assign_chart = null;
 var chart_config = null;
 var load_finished = false;
 var interval = null;
+var timer_bar_timeout = null;
 
 var projects = new Object();
 var projects_displayed = new Array();
@@ -176,6 +177,7 @@ function draw_chart() {
     load_finished = true;
 }
 
+// set up chart size according to overview table size
 function set_chart_size(chart_canvas) {
     const overview_table = document.getElementsByClassName('marmostats-overview-table')[0];
     const table_width = overview_table.clientWidth;
@@ -319,32 +321,52 @@ function add_buttons() {
                                     <label for="marmostats-toggle-button" class="lbl"></label><br /> \
                                     <p>Interval: </p> \
                                     <input id="marmostats-autorefresh-input" type="text" name="autorefresh-input" value="1"> \
-                                    <p>min</p>';
+                                    <p>min</p> \
+                                    <div id="marmostats-autorefresh-progress"></div>';
     autorefresh_container.appendChild(autorefresh_button);
 
     var checkbox = document.getElementById('marmostats-toggle-button');
     autorefresh_button.onchange = function(e) {
+        if (interval) {
+            clearInterval(interval);
+            interval = null;
+        }
+
+        if (timer_bar_timeout) {
+            clearTimeout(timer_bar_timeout);
+            timer_bar_timeout = null;
+        }
+
+        var timer_bar = document.getElementById('marmostats-autorefresh-progress');
         if (checkbox.checked) {
             var input_tag = document.getElementById('marmostats-autorefresh-input');
-            const interval = parseFloat(input_tag.value);
-            if (isNaN(interval) || interval < 0.1) {
+            const autorefresh_time = parseFloat(input_tag.value);
+            if (isNaN(autorefresh_time) || autorefresh_time < 0.1) {
                 input_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
                 checkbox.checked = false;
-                if (interval) {
-                    clearInterval(interval);
+                if (autorefresh_time) {
+                    clearInterval(autorefresh_time);
                 }
                 return;
             } else {
                 input_tag.style.backgroundColor = 'rgb(255, 255, 255)';
             }
+
+            
+            timer_bar.style.visibility = 'visible';
+            start_timer_bar(timer_bar, 0, autorefresh_time * 60);
+
             interval = setInterval(function() {
-                refresh_page(true)
-            }, interval * 60 * 1000);
-        } else if (interval) {
-            clearInterval(interval);
+                refresh_page(true);
+                timer_bar.style.visibility = 'visible';
+                start_timer_bar(timer_bar, 0, autorefresh_time * 60);
+            }, autorefresh_time * 60 * 1000);
+        } else {
+            timer_bar.style.width = 0;
+            timer_bar.style.visibility = 'hidden';
         }
     };
-    
+
 
     var input_box = document.getElementById('marmostats-autorefresh-input');
     input_box.onkeydown = function(e) {
@@ -368,36 +390,33 @@ function add_buttons() {
     refresh_button.prepend(image_tag);
     refresh_button.onclick = function() {
         loading_tag.style.visibility = 'visible';
-        refresh_page(false)
+        refresh_page(false);
     };
 }
 
-// toggle chart type between line and bar
-function set_chart_type(new_type) {
-    if (!chart_config || !assign_chart) return;
-
-    var chart_container = document.getElementById('marmostats-chart');
-    while (chart_container.firstChild) {
-        chart_container.removeChild(chart_container.firstChild);
+// update progress bar, total_time is in seconds
+function start_timer_bar(timer_bar, perc, total_time) {
+    if (perc > 100) {
+        timer_bar.style.width = '100%';
+        return;
     }
 
-    var chart_canvas = document.createElement('canvas');
-    chart_canvas.id = 'marmostats-chart-canvas';
-    chart_container.appendChild(chart_canvas);
-
-    assign_chart.destroy();
-
-    var new_config = jQuery.extend(true, {}, chart_config);
-    var ctx = chart_canvas.getContext('2d');
-    assign_chart = new Chart(ctx, new_config);
-    new_config.type = new_type;
-    chart_config = new_config;
-
-    set_chart_size(chart_canvas);
+    const update_rate = 0.2;
+    const unit_perc = update_rate / total_time * 100;
+    timer_bar.style.width = perc + '%';
+    timer_bar_timeout = setTimeout(function() {
+        start_timer_bar(timer_bar, perc + unit_perc, total_time);
+    }, update_rate * 1000);
 }
 
 // refresh test data
 function refresh_page(autorefresh) {
+    if (autorefresh) {
+        clearTimeout(timer_bar_timeout);
+        var timer_bar = document.getElementById('marmostats-autorefresh-progress');
+        timer_bar.style.visibility = 'hidden';
+    }
+
     $.get(current_url, function(response) {
         var doc = document.createElement('html');
         doc.innerHTML = response;

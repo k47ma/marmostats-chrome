@@ -27,11 +27,11 @@
   
 .lbl:active:after { transform: scale(1.05, 0.95); }
 
-.cbx:checked ~ label { background: rgba(125, 255, 125, 0.5); }
+.cbx:checked ~ label { background: rgba(95, 170, 95, 0.5); }
 
 .cbx:checked ~ label:after {
     left: 20px;
-    background: rgba(125, 255, 125, 1.0);
+    background: rgba(105, 180, 105, 1.0);
 }
 
 .cbx:disabled ~ label {

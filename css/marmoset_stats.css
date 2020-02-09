@@ -70,15 +70,15 @@ li {
 }
 
 .marmostats-selector:hover {
-    background-color: rgba(145, 238, 145, 0.3);
+    background-color: rgba(150, 230, 150, 0.3);
 }
 
 .marmostats-selector.selected {
-    background-color: rgba(145, 238, 145, 0.5);
+    background-color: rgba(150, 230, 150, 0.5);
 }
 
 .marmostats-selector.selected:hover {
-    background-color: rgba(145, 238, 145, 0.8);
+    background-color: rgba(150, 230, 150, 0.8);
 }
 
 .marmostats-neighbor-link {
@@ -159,6 +159,8 @@ li {
     display: inline-block;
     visibility: collapse;
     vertical-align: top;
+    font-family: monospace;
+    font-size: 14px;
 }
 
 #marmostats-selector-table th {
@@ -198,11 +200,11 @@ li {
     padding: 5px;
     margin-left: 60px;
     margin-right: 10px;
-    background-color: rgba(125, 255, 125, 0.3);
+    background-color: rgba(200, 200, 200, 0.5);
 }
 
 #marmostats-setting-container button:hover {
-    background-color: rgba(125, 255, 125, 0.5);
+    background-color: rgba(200, 200, 200, 0.8);
 }
 
 #marmostats-setting-container button img {
@@ -256,6 +258,14 @@ li {
     margin-top: 10px;
     margin-left: 18px;
     margin-right: 2px;
+}
+
+#marmostats-autorefresh-progress {
+    background-color: rgba(95, 170, 95, 1.0);
+    width: 0%;
+    height: 3px;
+    margin-top: 5px;
+    visibility: hidden;
 }
 
 #marmostats-neighbour-link-container {
