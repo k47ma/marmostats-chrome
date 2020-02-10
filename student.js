@@ -108,13 +108,17 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             max_result_tag.innerHTML = '-';
         } else {
             const due_date = parse_due_date(doc);
-            const latest_link = rows[2].children[result_ind].children[0].href;
+            const test_completed = rows[2].children[result_ind].getElementsByTagName('a').length > 0;
+            var latest_link = test_completed ? rows[2].children[result_ind].children[0].href : '';
 
             const latest_sub = rows[2].children[sub_ind].innerText;
             const latest_time = Date.parse(latest_sub);
-            const latest_tag = document.createElement('a');
+            const latest_tag_type = test_completed ? 'a' : 'span';
+            const latest_tag = document.createElement(latest_tag_type);
             latest_tag.innerText = latest_sub;
-            latest_tag.href = latest_link;
+            if (test_completed) {
+                latest_tag.href = latest_link;
+            }
             latest_sub_tag.innerHTML = '';
             latest_sub_tag.appendChild(latest_tag);
             if (latest_time < due_date) {
@@ -124,9 +128,12 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             }
 
             const latest_result = rows[2].children[result_ind].innerText;
-            const latest_result_link = document.createElement('a');
+            const latest_result_type = test_completed ? 'a' : 'span';
+            const latest_result_link = document.createElement(latest_result_type);
             latest_result_link.innerText = remove_newlines(latest_result);
-            latest_result_link.href = latest_link;
+            if (test_completed) {
+                latest_result_link.href = latest_link;
+            }
             latest_result_tag.innerHTML = '';
             latest_result_tag.appendChild(latest_result_link);
             if (latest_result == 'not tested yet') {

@@ -91,10 +91,12 @@ function check_not_tested() {
             refresh = true;
         } else if (result_tag.innerText) {
             var passed_all = true;
+            var passed_any = false;
             for (var curr_test = test_ind; curr_test < rows[i].children.length; ++curr_test) {
                 if (!rows[i].children[curr_test].classList.contains('passed')) {
                     passed_all = false;
-                    break;
+                } else {
+                    passed_any = true;
                 }
             }
 
@@ -102,8 +104,10 @@ function check_not_tested() {
                 result_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
             } else if (passed_all) {
                 result_tag.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
-            } else {
+            } else if (passed_any) {
                 result_tag.style.backgroundColor = 'rgba(255, 213, 0, 0.5)';
+            } else {
+                result_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
             }
         }
     }
