@@ -39,6 +39,23 @@ function refresh_countdown(refresh_tags, time_left) {
     }
 }
 
+// add tooltip to the given element
+function add_tooltip(target, content) {
+    var tooltip = document.createElement('span');
+    tooltip.innerHTML = content;
+    tooltip.classList.add('marmostats-tooltip');
+
+    target.appendChild(tooltip);
+    target.addEventListener('mouseenter', function(e) {
+        tooltip.style.visibility = 'visible';
+    });
+    target.addEventListener('mouseleave', function(e) {
+        tooltip.style.visibility = 'hidden';
+    });
+
+    tooltip.style.marginLeft = -tooltip.clientWidth / 2 + 'px';
+}
+
 // check test cases that are not tested and refresh every 5 seconds
 function check_not_tested() {
     var submission_table = document.getElementById('marmostats-submission-table');
@@ -56,6 +73,13 @@ function check_not_tested() {
     }
 
     if (results_ind == -1 || test_ind == -1) return;
+
+    for (var test_tag of rows[1].getElementsByTagName('th')) {
+        test_tag.classList.add('marmostats-tooltip-container');
+        const test_fullname = test_tag.children[0].getAttribute('title');
+        add_tooltip(test_tag, test_fullname);
+        test_tag.children[0].removeAttribute('title');
+    }
 
     var refresh = false;
     var refresh_tags = new Array();

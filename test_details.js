@@ -220,7 +220,9 @@ function add_tooltip(target, content) {
     });
     target.addEventListener('mouseleave', function(e) {
         tooltip.style.visibility = 'hidden';
-    })
+    });
+
+    tooltip.style.marginLeft = -tooltip.clientWidth / 2 + 'px';
 }
 
 // display an overview above the result table

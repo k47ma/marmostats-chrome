@@ -352,7 +352,6 @@ function add_buttons() {
                 input_tag.style.backgroundColor = 'rgb(255, 255, 255)';
             }
 
-            
             timer_bar.style.visibility = 'visible';
             start_timer_bar(timer_bar, 0, autorefresh_time * 60);
 
