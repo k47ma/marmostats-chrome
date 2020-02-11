@@ -48,10 +48,20 @@ function remove_newlines(s) {
     return s.replace(/(\r\n|\n|\r)|at/gm, '');
 }
 
-// check all pass results
+// check whether all test cases passed
 function is_all_passed(row, test_ind) {
     for (var curr_test = test_ind; curr_test < row.children.length; ++curr_test) {
         if (!row.children[curr_test].classList.contains('passed')) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// check whether all test cases failed
+function is_all_failed(row, test_ind) {
+    for (var curr_test = test_ind; curr_test < row.children.length; ++curr_test) {
+        if (row.children[curr_test].classList.contains('passed')) {
             return false;
         }
     }
@@ -142,6 +152,8 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
                 latest_result_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
             } else if (is_all_passed(rows[2], test_ind)) {
                 latest_result_tag.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
+            } else if (is_all_failed(rows[2], test_ind)) {
+                latest_result_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
             } else {
                 latest_result_tag.style.backgroundColor = 'rgba(255, 213, 0, 0.5)';
             }
@@ -149,18 +161,16 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             var max_result = latest_result;
             var max_score = sum_results(latest_result);
             var max_link = latest_link;
-            var all_test_passed = false;
+            var max_row = rows[2];
             for (var i = 2; i < rows.length; ++i) {
                 const result = rows[i].children[result_ind].innerText;
                 const score = sum_results(result);
-                if (is_all_passed(rows[i], test_ind)) {
-                    all_test_passed = true;
-                }
 
                 if (score > max_score) {
                     max_score = score;
                     max_result = result;
                     max_link = rows[i].children[result_ind].children[0].href;
+                    max_row = rows[i];
                 }
             }
             const max_result_link = document.createElement('a');
@@ -172,8 +182,10 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
                 max_result_tag.style.backgroundColor = 'rgba(30, 144, 255, 0.25)';
             } else if (max_result == 'did not compile') {
                 max_result_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
-            } else if (all_test_passed) {
+            } else if (is_all_passed(max_row, test_ind)) {
                 max_result_tag.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
+            } else if (is_all_failed(max_row, test_ind)) {
+                max_result_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
             } else {
                 max_result_tag.style.backgroundColor = 'rgba(255, 213, 0, 0.5)';
             }
