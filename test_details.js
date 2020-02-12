@@ -293,8 +293,13 @@ function set_page_styles() {
         if (submission_ind != -1 && submission_ind < rows[i].children.length) {
             var submission_cell = rows[i].children[submission_ind];
             const year = new Date().getFullYear();
-            const submission_text = submission_cell.textContent.replace(/(\r\n|\n|\r)|at/gm, '') + ' ' + year;
-            const submission_time = Date.parse(submission_text);
+            const submission_text = submission_cell.textContent.replace(/(\r\n|\n|\r)|\bat\b/gm, '');
+            const submission_time = Date.parse(submission_text + ' ' + year);
+            
+            if (submission_cell.getElementsByTagName('a')) {
+                submission_cell.children[0].innerText = submission_text;
+            }
+
             if (!submission_time || !due_time) {
                 submission_cell.style.backgroundColor = 'rgba(255, 213, 0, 0.25)';
             } else if (due_time < submission_time) {

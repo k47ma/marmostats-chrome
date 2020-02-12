@@ -170,6 +170,37 @@ function parse_result_table(result_table) {
     }
 }
 
+// add links to table row
+function update_table_links(target_cell, submission_url) {
+    $.get(submission_url, function(response) {
+        var doc = document.createElement('html');
+        doc.innerHTML = response;
+        const submission_table = doc.getElementsByTagName('table')[0];
+        const rows = submission_table.getElementsByTagName('tr');
+        const titles = rows[0].getElementsByTagName('th');
+
+        if (rows.length < 3) {
+            return;
+        }
+
+        var result_ind = -1;
+        for (var i = 0; i < titles.length; ++i) {
+            if (result_ind == -1 && titles[i].textContent == 'Results') {
+                result_ind = i;
+            }
+        }
+
+        if (rows[2].getElementsByTagName('a')) {
+            const latest_link = rows[2].children[result_ind].children[0].href;
+            var link_tag = document.createElement('a');
+            link_tag.href = latest_link;
+            link_tag.innerText = target_cell.innerText;
+            target_cell.innerHTML = '';
+            target_cell.appendChild(link_tag);
+        }
+    });
+}
+
 // display an overview above the result table
 function display_overview() {
     const overview_tag = document.getElementsByClassName('breadcrumb')[0];
@@ -219,35 +250,42 @@ function set_page_styles() {
 
     // set background color for table contents
     var result_table = document.getElementById('marmostats-project-table');
-    var submission_ind = -1;
     var rows = result_table.getElementsByTagName('tr');
     const titles = rows[0].getElementsByTagName('th');
 
+    var submission_ind = -1;
+    var link_ind = -1;
     for (var i = 0; i < titles.length; ++i) {
-        if (submission_ind == -1 && titles[i].textContent === 'last submission') {
+        if (submission_ind == -1 && titles[i].textContent == 'last submission') {
             submission_ind = i;
-            break;
+        } else if (link_ind == -1 && titles[i].textContent == 'Acct') {
+            link_ind = i;
         }
     }
+
+    if (submission_ind == -1 || link_ind == -1) return;
 
     for (var i = 1; i < rows.length; ++i) {
         if (!(rows[i].classList.contains('r0') || rows[i].classList.contains('r1'))) {
             continue;
         }
 
-        if (submission_ind != -1 && submission_ind < rows[i].children.length) {
-            var submission_cell = rows[i].children[submission_ind];
-            const year = new Date().getFullYear();
-            const submission_text = submission_cell.textContent.replace(/(\r\n|\n|\r)|at/gm, '') + ' ' + year;
-            const submission_time = Date.parse(submission_text);
-            if (!submission_time || !due_time) {
-                submission_cell.style.backgroundColor = 'rgba(255, 213, 0, 0.25)';
-            } else if (due_time < submission_time) {
-                submission_cell.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
-            } else {
-                submission_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
-            }
+        var submission_cell = rows[i].children[submission_ind];
+        const submission_link = rows[i].children[link_ind].children[0].href;
+        const submission_text = submission_cell.innerText.replace(/(\r\n|\n|\r)|\bat\b/gm, '');
+        const submission_time = Date.parse(submission_text);
+        submission_cell.innerText = submission_text;
+
+        if (!submission_time || !due_time) {
+            submission_cell.style.backgroundColor = 'rgba(255, 213, 0, 0.25)';
+        } else if (due_time < submission_time) {
+            submission_cell.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
+        } else {
+            submission_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
         }
+
+        // disabled due to performance issue
+        // update_table_links(submission_cell, submission_link);      
     }
 }
 
