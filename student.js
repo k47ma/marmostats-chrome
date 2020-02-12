@@ -162,9 +162,14 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             var max_score = sum_results(latest_result);
             var max_link = latest_link;
             var max_row = rows[2];
+            var has_valid = false;
             for (var i = 2; i < rows.length; ++i) {
                 const result = rows[i].children[result_ind].innerText;
                 const score = sum_results(result);
+
+                if (score > 0) {
+                    has_valid = true;
+                }
 
                 if (score > max_score) {
                     max_score = score;
@@ -173,11 +178,17 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
                     max_row = rows[i];
                 }
             }
-            const max_result_link = document.createElement('a');
-            max_result_link.innerText = remove_newlines(max_result);
-            max_result_link.href = max_link;
-            max_result_tag.innerHTML = '';
-            max_result_tag.appendChild(max_result_link);
+
+            if (has_valid) {
+                const max_result_link = document.createElement('a');
+                max_result_link.innerText = remove_newlines(max_result);
+                max_result_link.href = max_link;
+                max_result_tag.innerHTML = '';
+                max_result_tag.appendChild(max_result_link);
+            } else {
+                max_result_tag.innerHTML = remove_newlines(max_result);
+            }
+
             if (max_result == 'not tested yet') {
                 max_result_tag.style.backgroundColor = 'rgba(30, 144, 255, 0.25)';
             } else if (max_result == 'did not compile') {
