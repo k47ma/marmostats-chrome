@@ -11,6 +11,7 @@ var timer_bar_timeout = null;
 
 var projects = new Object();
 var projects_displayed = new Array();
+var display_all = true;
 
 
 // update the submission rate and correctness rate for each project
@@ -220,12 +221,23 @@ function update_chart() {
 function add_selectors() {
     const assign_regex = /^\D+\d*/g;
     var assignments = new Array();
+    var assigns_displayed = new Array();
     for (const project_name of Object.keys(projects)) {
         const assign_match = project_name.match(assign_regex);
         if (assign_match) {
             const assign_name = assign_match[0];
             if (!assignments.includes(assign_name)) {
                 assignments.push(assign_name);
+            }
+        }
+    }
+
+    for (const project_name of projects_displayed) {
+        const assign_match = project_name.match(assign_regex);
+        if (assign_match) {
+            const assign_name = assign_match[0];
+            if (!assigns_displayed.includes(assign_name)) {
+                assigns_displayed.push(assign_name);
             }
         }
     }
@@ -246,8 +258,11 @@ function add_selectors() {
     for (const assign_name of assignments.sort()) {
         var selector = document.createElement('td');
         selector.id = 'marmostats-selector-' + assign_name;
-        selector.classList.add('marmostats-selector', 'selected');
         selector.innerText = assign_name;
+        selector.classList.add('marmostats-selector');
+        if (assigns_displayed.includes(assign_name)) {
+            selector.classList.add('selected');
+        }
         selector.onclick = function() {
             if (this.classList.contains('selected')) {
                 this.classList.remove('selected');
@@ -278,6 +293,7 @@ function add_selectors() {
                     all_selector.classList.add('selected');
                 }
             }
+            chrome.storage.local.set({"projects_displayed": projects_displayed}, function() {});
             update_chart();
         };
         selector_container.appendChild(selector);
@@ -285,8 +301,11 @@ function add_selectors() {
     }
 
     all_selector.id = 'marmostats-selectall';
-    all_selector.classList.add('marmostats-selector', 'selected');
     all_selector.innerText = 'Toggle All';
+    all_selector.classList.add('marmostats-selector');
+    if (assigns_displayed.length) {
+        all_selector.classList.add('selected');
+    }
     all_selector.onclick = function() {
         if (this.classList.contains('selected')) {
             for (var selector of selectors) {
@@ -524,7 +543,7 @@ function add_test_details(total_students) {
             detail_tag.appendChild(detail_link_tag);
 
             projects[project_name] = {id: project_id, submission: -1, correctness: -1};
-            if (!load_finished && !projects_displayed.includes(project_name)) {
+            if (!load_finished && display_all && !projects_displayed.includes(project_name)) {
                 projects_displayed.push(project_name);
             }
             update_project_stats(project_name, rate_tag, score_tag, total_students);
@@ -658,6 +677,17 @@ function display_stats() {
     display_overview();
 }
 
+// load configurations using chrome.storage API
+function start() {
+    chrome.storage.local.get(["projects_displayed"], function(result) {
+        if (result.projects_displayed) {
+            projects_displayed = result.projects_displayed;
+            display_all = false;
+        }
+        display_stats();
+    });
+}
+
 $(document).ready(function() {
-    display_stats();
+    start();
 })
