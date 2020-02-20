@@ -411,11 +411,10 @@ function display_stats() {
     list_tag.innerHTML = '<li>Total Students: <b id="marmostats-total-students"></b></li>\
                           <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
                           <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>\
-                          <li>Score Summary: &nbsp;&nbsp; \
-                                             Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
-                                             Median: <b class="marmostats-score" id="marmostats-score-median"></b> \
-                                             Max: <b class="marmostats-score" id="marmostats-score-max"></b> \
-                                             Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>';
+                          <li>Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
+                              Median: <b class="marmostats-score" id="marmostats-score-median"></b> \
+                              Max: <b class="marmostats-score" id="marmostats-score-max"></b> \
+                              Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>';
     document.querySelector('div[id="marmostats-test-summary"]').appendChild(list_tag);
 
     if (result_table != undefined) {

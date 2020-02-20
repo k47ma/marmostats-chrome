@@ -18,19 +18,14 @@ function make_loading_image() {
 
 // parse the due date from page content
 function parse_due_date(doc) {
-    // set background color for deadline text
     for (var tag of doc.getElementsByTagName('p')) {
         if (tag.textContent.startsWith('Deadline')) {
             var text_node = tag.childNodes[1];
             due_text = text_node.textContent.replace(/(\r\n|\n|\r)|at/gm, '');
             due_time = Date.parse(due_text);
-            if (due_time) {
-                return due_time;
-            }
+            return due_time;
         }
     }
-
-    return null;
 }
 
 // sum up the results
