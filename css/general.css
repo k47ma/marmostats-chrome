@@ -1,0 +1,37 @@
+#marmostats-tabs {
+    font-family: "Open Sans", Arial, "Lucida Grande", sans-serif;
+    font-size: 16px;
+    margin: 30px 0px;
+}
+
+#marmostats-tab-current {
+    background-color: rgba(235, 100, 75, 0.8) !important;
+    color: white !important;
+}
+
+#marmostats-tabs a {
+    text-decoration: none;
+    font-family: "Open Sans", Arial, "Lucida Grande", sans-serif;
+    font-size: 18px;
+    color: rgba(235, 100, 75, 1);
+    padding: 10px;
+    margin: 10px 0px;
+}
+
+#marmostats-tabs a:hover {
+    background-color: rgba(225, 225, 225, 0.5);
+    color: rgba(200, 120, 85, 1);
+}
+
+#marmostats-tabs a:visited {
+    color: rgba(235, 100, 75, 1);
+}
+
+.marmostats-deadline-text {
+    font-size: 18px;
+}
+
+.marmostats-deadline-text span {
+    margin: 0px 5px;
+    padding: 0px 2px;
+}

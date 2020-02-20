@@ -180,7 +180,6 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             max_result_tag.innerHTML = '';
             max_result_tag.appendChild(max_result_link);
 
-
             if (max_result == 'not tested yet') {
                 max_result_tag.style.backgroundColor = 'rgba(30, 144, 255, 0.25)';
             } else if (max_result == 'did not compile') {

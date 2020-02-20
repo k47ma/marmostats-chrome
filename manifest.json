@@ -2,34 +2,39 @@
     "name": "MarmoStats",
     "short_name": "MarmoStats",
     "description": "A Chrome Extension for visualizing Marmoset test results",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "manifest_version": 2,
     "permissions": ["storage"],
     "content_scripts": [
       {
+        "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/*"],
+        "js": ["lib/jquery-3.4.1.min.js", "js/general.js"],
+        "css": ["css/general.css"]
+      },
+      {
         "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/course.jsp*"],
-        "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "homepage.js"],
-        "css": ["css/marmoset_stats.css", "css/toggle.css"]
+        "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "js/homepage.js"],
+        "css": ["css/marmostats.css", "css/toggle.css"]
       },
       {
         "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/projectTestResults.jsp*"],
-        "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "test_details.js"],
-        "css": ["css/marmoset_stats.css"]
+        "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "js/test_details.js"],
+        "css": ["css/marmostats.css"]
       },
       {
         "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/project.jsp*"],
-        "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "overview.js"],
-        "css": ["css/marmoset_stats.css"]
+        "js": ["lib/jquery-3.4.1.min.js", "lib/chart.js", "js/overview.js"],
+        "css": ["css/marmostats.css"]
       },
       {
         "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/studentProject.jsp?*"],
-        "js": ["lib/jquery-3.4.1.min.js", "submission.js"],
-        "css": ["css/marmoset_stats.css"]
+        "js": ["lib/jquery-3.4.1.min.js", "js/submission.js"],
+        "css": ["css/marmostats.css"]
       },
       {
         "matches": ["https://marmoset.student.cs.uwaterloo.ca/view/instructor/student.jsp?*"],
-        "js": ["lib/jquery-3.4.1.min.js", "student.js"],
-        "css": ["css/marmoset_stats.css"]
+        "js": ["lib/jquery-3.4.1.min.js", "js/student.js"],
+        "css": ["css/marmostats.css"]
       }
     ],
     "web_accessible_resources": ["images/loading.gif", "images/refresh.png",

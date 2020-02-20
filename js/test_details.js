@@ -246,31 +246,19 @@ function display_overview() {
 
 // change styles for page elements
 function set_page_styles() {
-    var due_text = '';
     var due_time = null;
 
     // set background color for deadline text
     for (var tag of document.getElementsByTagName('p')) {
         if (tag.textContent.startsWith('Deadline')) {
-            var text_node = tag.childNodes[1];
-            due_text = text_node.textContent.replace(/(\r\n|\n|\r)|at/gm, '');
+            const text_node = tag.childNodes[1];
+            const due_text = text_node.textContent.replace(/(\r\n|\n|\r)|at/gm, '');
             due_time = Date.parse(due_text);
-            const current_time = Date.now();
-            var text_tag = document.createElement('span');
-            text_tag.innerText = text_node.textContent.replace(/(\r\n|\n|\r)/gm, '');;
-            text_node.replaceWith(text_tag);
-            if (!due_time) {
-                text_tag.style.backgroundColor = 'rgba(255, 213, 0, 0.5)';
-            } else if (due_time < current_time) {
-                text_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.5)';
-            } else {
-                text_tag.style.backgroundColor = 'rgba(122, 235, 122, 0.5)';
-            }
             break;
         }
     }
 
-    if (!due_text) return;
+    if (!due_time) return;
 
     // set background color for table contents
     var result_table = document.getElementById('marmostats-result-table');
