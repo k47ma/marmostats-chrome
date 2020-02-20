@@ -245,4 +245,4 @@ function display_results() {
 
 $(document).ready(function() {
     display_results();
-})
+});

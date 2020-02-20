@@ -549,8 +549,6 @@ function add_test_details(total_students) {
             update_project_stats(project_name, rate_tag, score_tag, total_students);
         }
     }
-
-    update_table_style(project_table);
 }
 
 // update_table_style sets the style of table cells according to their contents
@@ -675,6 +673,7 @@ function display_stats() {
     project_table.parentElement.prepend(overview_tag);
 
     display_overview();
+    update_table_style(project_table);
 }
 
 // load configurations using chrome.storage API
@@ -690,4 +689,4 @@ function start() {
 
 $(document).ready(function() {
     start();
-})
+});

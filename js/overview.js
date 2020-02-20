@@ -405,4 +405,4 @@ function display_stats() {
 
 $(document).ready(function() {
     display_stats();
-})
+});

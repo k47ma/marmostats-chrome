@@ -174,4 +174,4 @@ $(document).ready(function() {
     submission_table.id = 'marmostats-submission-table';
 
     check_not_tested();
-})
+});
