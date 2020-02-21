@@ -142,7 +142,7 @@ function parse_test_result(table, test_ind, col_ind) {
 }
 
 // parse the test result table and add stats
-function parse_result_table(result_table) {
+function parse_result_table(result_table, chart_enabled) {
     const total_cols = result_table.getElementsByTagName('tr')[0].children.length;
     const rows = result_table.getElementsByTagName('tr');
     const titles = rows[0].getElementsByTagName('th');
@@ -205,7 +205,9 @@ function parse_result_table(result_table) {
         add_tooltip(test_title_container, test_fullname);
     }
 
-    draw_chart(test_names, test_results);
+    if (chart_enabled) {
+        draw_chart(test_names, test_results);
+    }
 }
 
 // add tooltip to the given element
@@ -401,6 +403,7 @@ function display_stats() {
     var result_table = document.getElementsByTagName('table')[0];
     result_table.id = 'marmostats-result-table'
     result_table.removeAttribute('title');
+
     var overview_tag = document.createElement('div');
     overview_tag.id = 'marmostats-overview';
     overview_tag.innerHTML = '<div id="marmostats-test-summary"></div><div id="marmostats-chart"></div>';
@@ -409,17 +412,18 @@ function display_stats() {
     var list_tag = document.createElement('ul');
     list_tag.className = "marmostats-list";
     list_tag.innerHTML = '<li>Total Students: <b id="marmostats-total-students"></b></li>\
-                          <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
-                          <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>\
-                          <li>Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
-                              Median: <b class="marmostats-score" id="marmostats-score-median"></b> \
-                              Max: <b class="marmostats-score" id="marmostats-score-max"></b> \
-                              Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>';
+                        <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
+                        <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>\
+                        <li>Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
+                            Median: <b class="marmostats-score" id="marmostats-score-median"></b> \
+                            Max: <b class="marmostats-score" id="marmostats-score-max"></b> \
+                            Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>';
     document.querySelector('div[id="marmostats-test-summary"]').appendChild(list_tag);
 
-    if (result_table != undefined) {
-        parse_result_table(result_table);
-    }
+    chrome.storage.local.get(['chart_testdetail'], function(result) {
+        chart_enabled = (!result.hasOwnProperty('chart_testdetail') || result.chart_testdetail);
+        parse_result_table(result_table, chart_enabled);
+    });
 
     display_overview();
     set_page_styles();

@@ -10,7 +10,7 @@ h2 {
 label, input {
     display: inline-block;
     vertical-align: middle;
-    margin: 5px;
+    margin: 5px 10px;
 }
 
 span {

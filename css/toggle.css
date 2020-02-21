@@ -12,7 +12,7 @@
 
 .lbl:after {
     position: absolute;
-    left: -8px;
+    left: -5px;
     top: -2px;
     display: inline-block;
     width: 20px;
@@ -30,15 +30,19 @@
 .cbx:checked ~ label { background: rgba(95, 170, 95, 0.5); }
 
 .cbx:checked ~ label:after {
-    left: 20px;
+    left: 18px;
     background: rgba(105, 180, 105, 1.0);
 }
 
 .cbx:disabled ~ label {
-    background: #d5d5d5;
+    background: rgba(235, 235, 235, 1);
     pointer-events: none;
 }
   
-.cbx:disabled ~ label:after { background: #bcbdbc; }
+.cbx:disabled ~ label:after {
+    background: rgba(255, 255, 255, 1);
+}
 
-.hidden { display: none; }
+.hidden {
+    display: none;
+}

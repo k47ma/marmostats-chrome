@@ -650,12 +650,12 @@ function update_table_style(table) {
 }
 
 // display stats for overview page
-function display_stats(marmostats_enabled) {
+function display_stats(chart_enabled) {
     // setup html tags for showing results
     var project_table = document.getElementsByTagName('table')[0];
     project_table.classList.add('marmostats-overview-table');
 
-    if (marmostats_enabled) {
+    if (chart_enabled) {
         var overview_tag = document.createElement('div');
         overview_tag.id = 'marmostats-overview';
         overview_tag.innerHTML = '<div id="marmostats-test-summary"> \
@@ -681,14 +681,14 @@ function display_stats(marmostats_enabled) {
 
 // load configurations using chrome.storage API
 function start() {
-    chrome.storage.local.get(['projects_displayed', 'enabled'], function(result) {
+    chrome.storage.local.get(['projects_displayed', 'chart_homepage'], function(result) {
         if (result.projects_displayed) {
             projects_displayed = result.projects_displayed;
             display_all = false;
         }
 
-        marmostats_enabled = (!result.hasOwnProperty('enabled') || result.enabled);
-        display_stats(marmostats_enabled);
+        chart_enabled = (!result.hasOwnProperty('chart_homepage') || result.chart_homepage);
+        display_stats(chart_enabled);
     });
 }
 

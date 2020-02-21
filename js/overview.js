@@ -124,7 +124,7 @@ function draw_chart(test_scores) {
 }
 
 // parse the test result table and add stats
-function parse_result_table(result_table) {
+function parse_result_table(result_table, chart_enabled) {
     const total_cols = result_table.getElementsByTagName('tr')[0].children.length;
     const rows = result_table.getElementsByTagName('tr');
     const titles = rows[0].getElementsByTagName('th');
@@ -166,7 +166,9 @@ function parse_result_table(result_table) {
 
     if (test_scores) {
         update_student_scores(test_scores);
-        draw_chart(test_scores);
+        if (chart_enabled) {
+            draw_chart(test_scores);
+        }
     }
 }
 
@@ -394,9 +396,10 @@ function display_stats() {
                               Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>';
     document.querySelector('div[id="marmostats-test-summary"]').appendChild(list_tag);
 
-    if (result_table != undefined) {
-        parse_result_table(result_table);
-    }
+    chrome.storage.local.get(['chart_overview'], function(result) {
+        chart_enabled = (!result.hasOwnProperty('chart_overview') || result.chart_overview);
+        parse_result_table(result_table, chart_enabled);
+    });
 
     display_overview();
     set_page_styles();
