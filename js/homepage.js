@@ -650,40 +650,45 @@ function update_table_style(table) {
 }
 
 // display stats for overview page
-function display_stats() {
+function display_stats(marmostats_enabled) {
     // setup html tags for showing results
     var project_table = document.getElementsByTagName('table')[0];
     project_table.classList.add('marmostats-overview-table');
 
-    var overview_tag = document.createElement('div');
-    overview_tag.id = 'marmostats-overview';
-    overview_tag.innerHTML = '<div id="marmostats-test-summary"> \
-                                <p>Total Students: <b id="marmostats-total-students"></b></p> \
-                              </div> \
-                              <div id="marmostats-selector-container"> \
-                                <table id="marmostats-selector-table"></table> \
-                                <div id="marmostats-setting-container"></div> \
-                              </div> \
-                              <div id="marmostats-progress"> \
-                                <p id="marmostats-progress-text">Loading project results...</p>\
-                                <div id="marmostats-progress-bar-background"><div id="marmostats-progress-bar"></div></div> \
-                                <p id="marmostats-progress-perc"></p> \
-                              </div> \
-                              <div id="marmostats-chart"></div>';
-    project_table.parentElement.prepend(overview_tag);
+    if (marmostats_enabled) {
+        var overview_tag = document.createElement('div');
+        overview_tag.id = 'marmostats-overview';
+        overview_tag.innerHTML = '<div id="marmostats-test-summary"> \
+                                    <p>Total Students: <b id="marmostats-total-students"></b></p> \
+                                </div> \
+                                <div id="marmostats-selector-container"> \
+                                    <table id="marmostats-selector-table"></table> \
+                                    <div id="marmostats-setting-container"></div> \
+                                </div> \
+                                <div id="marmostats-progress"> \
+                                    <p id="marmostats-progress-text">Loading project results...</p>\
+                                    <div id="marmostats-progress-bar-background"><div id="marmostats-progress-bar"></div></div> \
+                                    <p id="marmostats-progress-perc"></p> \
+                                </div> \
+                                <div id="marmostats-chart"></div>';
+        project_table.parentElement.prepend(overview_tag);
 
-    display_overview();
+        display_overview();
+    }
+
     update_table_style(project_table);
 }
 
 // load configurations using chrome.storage API
 function start() {
-    chrome.storage.local.get(["projects_displayed"], function(result) {
+    chrome.storage.local.get(['projects_displayed', 'enabled'], function(result) {
         if (result.projects_displayed) {
             projects_displayed = result.projects_displayed;
             display_all = false;
         }
-        display_stats();
+
+        marmostats_enabled = (!result.hasOwnProperty('enabled') || result.enabled);
+        display_stats(marmostats_enabled);
     });
 }
 
