@@ -4,13 +4,16 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../css/toggle.css" title="style" />
     <link rel="stylesheet" type="text/css" href="../css/popup.css" title="style" />
+    <script src="../lib/jquery-3.4.1.min.js"></script>
+    <script src="../js/popup.js"></script>
 </head>
 
 <body>
-    <h2>MarmoStats Settings</h2>
+    <div class="marmostats-title"><img src="../icons/marmostats-32.png" class="marmostats-icon"><h2>MarmoStats</h2></div>
 
-    <div id="marmostats-homepage-setting">
-        <table>
+    <div id="marmostats-chart-setting">
+        <div class="marmostats-setting-title"><h3 id="marmostats-chart-title">Chart Settings</h3></div>
+        <table id="marmostats-chart-table">
             <tr>
                 <td>
                     <span>Homepage Chart:</span>
@@ -40,9 +43,6 @@
             </tr>
         </table>
     </div>
-
-
-    <script src="../js/popup.js"></script>
 </body>
 
 </html>

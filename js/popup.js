@@ -26,12 +26,32 @@ function setup_toggle(button, key) {
     });
 };
 
-document.addEventListener('DOMContentLoaded', function() {
-    var homepage_toggle = document.getElementById('marmostats-homepage-toggle');
-    var overview_toggle = document.getElementById('marmostats-overview-toggle');
-    var testdetail_toggle = document.getElementById('marmostats-testdetail-toggle');
+// setup title events
+function setup_title(title_id, table_id) {
+    var title = document.getElementById(title_id);
+    var arrow = document.createElement('img');
+    arrow.src = '../icons/arrow-down-32.png';
+    arrow.classList.add('marmostats-icon-small');
+    title.parentElement.insertBefore(arrow, title);
 
-    setup_toggle(homepage_toggle, 'chart_homepage');
-    setup_toggle(overview_toggle, 'chart_overview');
-    setup_toggle(testdetail_toggle, 'chart_testdetail');
+    title.parentElement.addEventListener('click', function() {
+        $('#' + table_id).slideToggle(400);
+        if (arrow.classList.contains('marmostats-rotated')) {
+            arrow.classList.remove('marmostats-rotated');
+        } else {
+            arrow.classList.add('marmostats-rotated');
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var homepage_button = document.getElementById('marmostats-homepage-toggle');
+    var overview_button = document.getElementById('marmostats-overview-toggle');
+    var testdetail_button = document.getElementById('marmostats-testdetail-toggle');
+
+    setup_toggle(homepage_button, 'chart_homepage');
+    setup_toggle(overview_button, 'chart_overview');
+    setup_toggle(testdetail_button, 'chart_testdetail');
+
+    setup_title('marmostats-chart-title', 'marmostats-chart-table');
 });

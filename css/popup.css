@@ -1,10 +1,21 @@
 body {
-    width: 190px;
+    width: 180px;
 }
 
 h2 {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
     text-align: center;
-    margin-bottom: 20px;
+    vertical-align: middle;
+    margin-bottom: 18px;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+h3 {
+    font-size: 15px;
+    font-family: 'Open Sans', sans-serif;
+    margin: 2px 5px;
+    display: inline-block;
 }
 
 label, input {
@@ -13,12 +24,51 @@ label, input {
     margin: 5px 10px;
 }
 
-span {
-    display: inline-block;
-    vertical-align: middle;
+table {
+    margin-left: 5px;
+    overflow: hidden;
+    display: block;
+}
+
+td {
     font-size: 14px;
 }
 
-table {
+.marmostats-icon {
+    margin-right: 3px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 22px;
+    position: relative;
+    top: -3px;
+}
+
+.marmostats-icon-small {
+    margin: 1px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    top: -3px;;
+    width: 12px;
+}
+
+.marmostats-title {
+    text-align: center;
+}
+
+.marmostats-setting-title {
     margin-left: 5px;
+    cursor: pointer;
+}
+
+.marmostats-icon-small {
+    overflow: hidden;
+    transition-duration: 300ms;
+    transition-property: transform;
+    cursor: pointer;
+}
+
+.marmostats-rotated {
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
 }

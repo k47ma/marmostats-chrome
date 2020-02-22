@@ -400,11 +400,11 @@ function add_buttons() {
 
     var loading_tag = document.createElement('img');
     loading_tag.id = 'marmostats-refresh-loading';
-    loading_tag.src = chrome.extension.getURL('images/loading.gif');
+    loading_tag.src = chrome.extension.getURL('icons/loading.gif');
     container.appendChild(loading_tag);
 
     var image_tag = document.createElement('img');
-    image_tag.src = chrome.extension.getURL('images/refresh.png');
+    image_tag.src = chrome.extension.getURL('icons/refresh.png');
     refresh_button.prepend(image_tag);
     refresh_button.onclick = function() {
         loading_tag.style.visibility = 'visible';
@@ -523,7 +523,7 @@ function add_test_details(total_students) {
             rows[i].insertBefore(detail_tag, rows[i].children[3]);
 
             var image_tag_1 = document.createElement('img');
-            image_tag_1.src = chrome.extension.getURL('images/loading.gif');
+            image_tag_1.src = chrome.extension.getURL('icons/loading.gif');
             image_tag_1.style.width = '18px';
             image_tag_1.style.height = '18px';
             var image_tag_2 = image_tag_1.cloneNode(true);
@@ -532,7 +532,7 @@ function add_test_details(total_students) {
             var detail_link_tag = document.createElement('a');
             detail_link_tag.href = detail_link;
             var detail_image = document.createElement('img');
-            detail_image.src = chrome.extension.getURL('images/bar-chart.png');
+            detail_image.src = chrome.extension.getURL('icons/bar-chart.png');
             detail_image.title = 'View Test Details for ' + project_name;
             detail_image.style.width = '18px';
             detail_image.style.height = '18px';
@@ -640,7 +640,7 @@ function update_table_style(table) {
             var link_tag = overview_cell.getElementsByTagName('a')[0];
             link_tag.innerText = '';
             var image_tag = document.createElement('img');
-            image_tag.src = chrome.extension.getURL('images/line-chart.png');
+            image_tag.src = chrome.extension.getURL('icons/line-chart.png');
             image_tag.title = 'Overview for ' + project_name;
             image_tag.style.width = '18px';
             image_tag.style.height = '18px';
