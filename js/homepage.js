@@ -5,6 +5,7 @@ const current_url = window.location.href;
 
 var assign_chart = null;
 var chart_config = null;
+var chart_type = null;
 var load_finished = false;
 var interval = null;
 var timer_bar_timeout = null;
@@ -113,7 +114,7 @@ function draw_chart() {
 
     var ctx = chart_canvas.getContext('2d');
     chart_config = {
-        type: 'bar',
+        type: chart_type,
         data: {
             labels: projects_displayed,
             datasets: [{
@@ -681,10 +682,18 @@ function display_stats(chart_enabled) {
 
 // load configurations using chrome.storage API
 function start() {
-    chrome.storage.local.get(['projects_displayed', 'chart_homepage'], function(result) {
+    chrome.storage.local.get(['projects_displayed', 'chart_homepage', 'chart_isbar'], function(result) {
         if (result.projects_displayed) {
             projects_displayed = result.projects_displayed;
             display_all = false;
+        }
+
+        if (!result.hasOwnProperty('chart_isbar')) {
+            chart_type = 'bar';
+        } else if (result.chart_isbar) {
+            chart_type = 'bar';
+        } else {
+            chart_type = 'line';
         }
 
         chart_enabled = (!result.hasOwnProperty('chart_homepage') || result.chart_homepage);

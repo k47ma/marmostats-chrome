@@ -44,15 +44,6 @@ td {
     top: -3px;
 }
 
-.marmostats-icon-small {
-    margin: 1px;
-    display: inline-block;
-    vertical-align: middle;
-    position: relative;
-    top: -3px;;
-    width: 12px;
-}
-
 .marmostats-title {
     text-align: center;
 }
@@ -63,6 +54,19 @@ td {
 }
 
 .marmostats-icon-small {
+    margin: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 12px;
+}
+
+.marmostats-icon-toggle {
+    margin: 1px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    top: -3px;
+    width: 12px;
     overflow: hidden;
     transition-duration: 300ms;
     transition-property: transform;
