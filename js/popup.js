@@ -6,7 +6,7 @@ function setup_toggle(button, key, default_value) {
         if (!result.hasOwnProperty(key)) {
             var data = new Object();
             data[key] = default_value;
-            chrome.storage.local.set(data, function() {});
+            chrome.storage.local.set(data);
             button.checked = default_value;
         } else if (result[key]) {
             button.checked = true;
@@ -34,13 +34,28 @@ function setup_title(title_id, table_id) {
     arrow.classList.add('marmostats-icon-toggle');
     title.parentElement.insertBefore(arrow, title);
 
-    title.parentElement.addEventListener('click', function() {
-        $('#' + table_id).slideToggle(400);
-        if (arrow.classList.contains('marmostats-rotated')) {
-            arrow.classList.remove('marmostats-rotated');
-        } else {
+    chrome.storage.local.get([table_id], function(result) {
+        if (!result.hasOwnProperty(table_id)) {
+            var data = new Object();
+            data[table_id] = true;
+            chrome.storage.local.set(data);
+        } else if (!result[table_id]) {
+            $('#' + table_id).hide();
             arrow.classList.add('marmostats-rotated');
         }
+    });
+
+    title.parentElement.addEventListener('click', function() {
+        $('#' + table_id).slideToggle(400);
+        var data = new Object();
+        if (arrow.classList.contains('marmostats-rotated')) {
+            data[table_id] = true;
+            arrow.classList.remove('marmostats-rotated');
+        } else {
+            data[table_id] = false;
+            arrow.classList.add('marmostats-rotated');
+        }
+        chrome.storage.local.set(data);
     });
 }
 
