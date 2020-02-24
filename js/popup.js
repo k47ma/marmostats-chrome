@@ -59,7 +59,7 @@ function setup_title(title_id, table_id) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function() {
     var homepage_button = document.getElementById('marmostats-homepage-toggle');
     var overview_button = document.getElementById('marmostats-overview-toggle');
     var testdetail_button = document.getElementById('marmostats-testdetail-toggle');
