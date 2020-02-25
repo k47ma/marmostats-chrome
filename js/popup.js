@@ -24,7 +24,7 @@ function setup_toggle(button, key, default_value) {
         }
         chrome.storage.local.set(data, function() {});
     });
-};
+}
 
 // setup title events
 function setup_title(title_id, table_id) {

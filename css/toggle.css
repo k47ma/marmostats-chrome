@@ -24,13 +24,13 @@
     transition: all 0.3s ease;
     vertical-align: middle;
 }
-  
+
 .lbl:active:after { transform: scale(1.05, 0.95); }
 
 .cbx:checked ~ label { background: rgba(95, 170, 95, 0.5); }
 
 .cbx:checked ~ label:after {
-    left: 18px;
+    left: 16px;
     background: rgba(105, 180, 105, 1.0);
 }
 
@@ -38,8 +38,53 @@
     background: rgba(235, 235, 235, 1);
     pointer-events: none;
 }
-  
+
 .cbx:disabled ~ label:after {
+    background: rgba(255, 255, 255, 1);
+}
+
+.lbl-small {
+    position: relative;
+    display: inline-block;
+    height: 10px;
+    width: 25px;
+    background: #bfbfbf;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    vertical-align: middle;
+}
+
+.lbl-small:after {
+    position: absolute;
+    left: -3px;
+    top: -3px;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 100px;
+    background: #cfcfcf;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    content: '';
+    transition: all 0.3s ease;
+    vertical-align: middle;
+}
+
+.lbl-small:active:after { transform: scale(1.05, 0.95); }
+
+.cbx-small:checked ~ label { background: rgba(95, 170, 95, 0.5); }
+
+.cbx-small:checked ~ label:after {
+    left: 13px;
+    background: rgba(105, 180, 105, 1.0);
+}
+
+.cbx-small:disabled ~ label {
+    background: rgba(235, 235, 235, 1);
+    pointer-events: none;
+}
+
+.cbx-small:disabled ~ label:after {
     background: rgba(255, 255, 255, 1);
 }
 
