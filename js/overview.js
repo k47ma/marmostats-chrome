@@ -88,8 +88,8 @@ function draw_chart(test_scores) {
                 data: score_freq,
                 backgroundColor: 'rgba(122, 210, 122, 0.5)',
                 borderColor: 'rgba(100, 210, 100, 0.8)',
-                hoverBackgroundColor: 'rgba(100, 200, 100, 0.65)',
-                hoverBorderColor: 'rgba(100, 200, 100, 1.0)',
+                hoverBackgroundColor: 'rgba(100, 210, 100, 0.5)',
+                hoverBorderColor: 'rgba(100, 210, 100, 1.0)',
                 borderWidth: 1,
                 hoverBorderWidth: 2,
                 barPercentage: 0.8
