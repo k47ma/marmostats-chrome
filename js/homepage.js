@@ -120,12 +120,12 @@ function draw_chart() {
             datasets: [{
                 label: 'Submission Rate',
                 data: submissions,
-                backgroundColor: 'rgba(30, 144, 255, 0.4)',
-                borderColor: 'rgba(30, 144, 255, 0.8)',
-                hoverBackgroundColor: 'rgba(30, 144, 255, 0.5)',
-                hoverBorderColor: 'rgba(30, 144, 255, 1.0)',
-                borderWidth: 2,
-                hoverBorderWidth: 3,
+                backgroundColor: 'rgba(30, 145, 255, 0.4)',
+                borderColor: 'rgba(30, 145, 255, 0.8)',
+                hoverBackgroundColor: 'rgba(30, 145, 255, 0.5)',
+                hoverBorderColor: 'rgba(30, 145, 255, 1.0)',
+                borderWidth: 1,
+                hoverBorderWidth: 2,
                 pointRadius: 3,
                 pointHoverBorderWidth: 5,
                 barPercentage: 0.7,
@@ -134,12 +134,12 @@ function draw_chart() {
             {
                 label: 'Avg. Score',
                 data: correctness,
-                backgroundColor: 'rgba(122, 235, 122, 0.4)',
-                borderColor: 'rgba(100, 231, 100, 0.8)',
-                hoverBackgroundColor: 'rgba(100, 231, 100, 0.5)',
-                hoverBorderColor: 'rgba(100, 231, 100, 1.0)',
-                borderWidth: 2,
-                hoverBorderWidth: 3,
+                backgroundColor: 'rgba(122, 210, 122, 0.5)',
+                borderColor: 'rgba(100, 210, 100, 0.8)',
+                hoverBackgroundColor: 'rgba(100, 200, 100, 0.65)',
+                hoverBorderColor: 'rgba(100, 200, 100, 1.0)',
+                borderWidth: 1,
+                hoverBorderWidth: 2,
                 pointRadius: 3,
                 pointHoverRadius: 5,
                 barPercentage: 0.7,
@@ -302,7 +302,7 @@ function add_selectors() {
     }
 
     all_selector.id = 'marmostats-selectall';
-    all_selector.innerText = 'Toggle All';
+    all_selector.innerText = 'All';
     all_selector.classList.add('marmostats-selector');
     if (assigns_displayed.length) {
         all_selector.classList.add('selected');

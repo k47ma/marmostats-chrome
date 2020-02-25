@@ -1,7 +1,7 @@
 .lbl {
     position: relative;
     display: inline-block;
-    height: 15px;
+    height: 13px;
     width: 30px;
     background: #bfbfbf;
     border-radius: 100px;
@@ -12,8 +12,8 @@
 
 .lbl:after {
     position: absolute;
-    left: -5px;
-    top: -2px;
+    left: -6px;
+    top: -3px;
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -27,11 +27,11 @@
 
 .lbl:active:after { transform: scale(1.05, 0.95); }
 
-.cbx:checked ~ label { background: rgba(95, 170, 95, 0.5); }
+.cbx:checked ~ label { background: rgba(30, 125, 235, 0.5); }
 
 .cbx:checked ~ label:after {
     left: 16px;
-    background: rgba(105, 180, 105, 1.0);
+    background: rgba(50, 135, 210, 1);
 }
 
 .cbx:disabled ~ label {
@@ -72,11 +72,11 @@
 
 .lbl-small:active:after { transform: scale(1.05, 0.95); }
 
-.cbx-small:checked ~ label { background: rgba(95, 170, 95, 0.5); }
+.cbx-small:checked ~ label { background: rgba(30, 125, 235, 0.5); }
 
 .cbx-small:checked ~ label:after {
     left: 13px;
-    background: rgba(105, 180, 105, 1.0);
+    background: rgba(50, 135, 210, 1);
 }
 
 .cbx-small:disabled ~ label {

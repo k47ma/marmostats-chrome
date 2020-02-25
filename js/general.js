@@ -6,8 +6,9 @@ function add_tab_styles(container) {
                       'Utilities': 'projectUtilities.jsp',
                       'History': 'projectTestHistory.jsp',
                       'Test details': 'projectTestResults.jsp',
-                      'Inconsistencies': 'failedBackgroundRetests.jsp'};
-                      
+                      'Inconsistencies': 'failedBackgroundRetests.jsp'
+                     };
+
     const current_url = window.location.href;
     var link_tags = container.getElementsByTagName('a');
     for (var link_tag of link_tags) {
@@ -52,7 +53,7 @@ function add_styles() {
             } else if (due_time < current_time) {
                 text_tag.style.backgroundColor = 'rgba(255, 69, 0, 0.5)';
             } else {
-                text_tag.style.backgroundColor = 'rgba(122, 235, 122, 0.5)';
+                text_tag.style.backgroundColor = 'rgba(100, 210, 100, 0.5)';
             }
             break;
         }

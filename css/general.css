@@ -9,6 +9,11 @@
     color: white !important;
 }
 
+#marmostats-tab-current:hover {
+    background-color: rgba(235, 100, 75, 0.9) !important;
+    color: white !important;
+}
+
 #marmostats-tabs a {
     text-decoration: none;
     font-family: "Open Sans", Arial, "Lucida Grande", sans-serif;

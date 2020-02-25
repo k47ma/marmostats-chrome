@@ -1,5 +1,5 @@
 body {
-    width: 180px;
+    width: 170px;
 }
 
 h2 {
@@ -22,7 +22,7 @@ h3 {
 label, input {
     display: inline-block;
     vertical-align: middle;
-    margin: 5px 10px;
+    margin: 5px;
 }
 
 table {
@@ -33,6 +33,11 @@ table {
 
 td {
     font-size: 14px;
+}
+
+span {
+    font-size: 14px;
+    font-family: "Open Sans", Arial, "Lucida Grande", sans-serif;
 }
 
 .marmostats-icon {
