@@ -46,7 +46,7 @@ function setup_title(title_id, table_id) {
     });
 
     title.parentElement.addEventListener('click', function() {
-        $('#' + table_id).slideToggle(400);
+        $('#' + table_id).slideToggle(200);
         var data = new Object();
         if (arrow.classList.contains('marmostats-rotated')) {
             data[table_id] = true;

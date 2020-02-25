@@ -58,6 +58,8 @@ td {
     display: inline-block;
     vertical-align: middle;
     width: 12px;
+    height: 12px;
+    overflow: hidden;
 }
 
 .marmostats-icon-toggle {
@@ -67,8 +69,9 @@ td {
     position: relative;
     top: -3px;
     width: 12px;
+    height: 12px;
     overflow: hidden;
-    transition-duration: 300ms;
+    transition-duration: 200ms;
     transition-property: transform;
     cursor: pointer;
 }
