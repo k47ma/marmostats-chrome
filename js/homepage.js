@@ -428,7 +428,7 @@ function add_buttons() {
     }
 
     var refresh_tag = document.createElement('div');
-    refresh_tag.style.display = 'inline-block';
+    refresh_tag.id = 'marmostats-refresh-container';
     refresh_tag.innerHTML = '<button id="marmostats-refresh-button"><span>Refresh</span></button> \
                              <br /><div id="marmostats-refresh-progress-container"><div id="marmostats-refresh-progress-bar"></div></div>';
     container.appendChild(refresh_tag);
