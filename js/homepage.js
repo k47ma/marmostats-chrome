@@ -482,6 +482,8 @@ function refresh_page(autorefresh) {
         current_table.parentNode.replaceChild(result_table, current_table);
 
         display_overview();
+
+        update_table_style(result_table);
     });
 }
 
