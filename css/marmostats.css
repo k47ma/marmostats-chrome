@@ -102,9 +102,6 @@ li {
     margin-left: 40px;
     width: 100%;
     height: 20px;
-}
-
-#marmostats-progress {
     margin-top: 10px;
     margin-bottom: 30px;
     display: block;
@@ -138,6 +135,20 @@ li {
     margin-left: 10px;
     margin-block-start: 0px;
     margin-block-end: 0px;
+}
+
+#marmostats-refresh-progress-container {
+    margin: 5px 10px 0px 60px;
+    display: inline-block;
+    width: -webkit-fill-available;
+    visibility: hidden;
+}
+
+#marmostats-refresh-progress-bar {
+    background-color: rgba(30, 144, 255, 0.8);
+    width: 0%;
+    height: 3px;
+    border-radius: 1px;
 }
 
 #marmostats-selector-table {
@@ -217,6 +228,9 @@ li {
     vertical-align: middle;
     display: inline-block;
     margin-left: 10px;
+    vertical-align: top;
+    position: relative;
+    top: -10px;
 }
 
 #marmostats-autorefresh-container {
@@ -253,6 +267,7 @@ li {
     height: 3px;
     margin-top: 5px;
     visibility: hidden;
+    border-radius: 1px;
 }
 
 #marmostats-neighbour-link-container {

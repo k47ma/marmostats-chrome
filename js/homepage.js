@@ -10,6 +10,8 @@ var load_finished = false;
 var interval = null;
 var timer_bar_timeout = null;
 
+var progress_percent = 0;
+
 var projects = new Object();
 var projects_displayed = new Array();
 var display_all = true;
@@ -73,6 +75,31 @@ function update_project_stats(project_name, rate_tag, score_tag, total_students)
     });
 }
 
+// update progress bar smoothly using interval
+function update_progress_bar(perc_displayed, bar_tag, text_tag=null, step=1) {
+    if (perc_displayed >= 100) {
+        perc_displayed = 100;
+    }
+
+    if (perc_displayed < progress_percent) {
+        perc_displayed += step;
+        const new_step = (progress_percent - perc_displayed) / 5;
+        if (new_step > step) {
+            step = new_step;
+        }
+        if (text_tag) {
+            text_tag.innerText = parseInt(perc_displayed) + '%';
+        }
+        bar_tag.style.width = perc_displayed + '%';
+    }
+
+    if (perc_displayed < 100) {
+        setTimeout(function() {
+            update_progress_bar(perc_displayed, bar_tag, text_tag, step);
+        }, 30);
+    }
+}
+
 // try to draw a column chart about the test results under overview
 function draw_chart() {
     const total_projects = Object.keys(projects).length;
@@ -83,14 +110,8 @@ function draw_chart() {
         }
     }
 
-    // draw progress bar if not all projects are done
     var progress_container = document.getElementById('marmostats-progress');
-    var bar_tag = document.getElementById('marmostats-progress-bar');
-    var perc_tag = document.getElementById('marmostats-progress-perc');
-    const percent = (finished_projects / total_projects * 100).toFixed(1) + '%';
-
-    bar_tag.style.width = percent;
-    perc_tag.innerText = percent;
+    progress_percent = parseInt(finished_projects / total_projects * 100);
 
     if (finished_projects < total_projects) {
         progress_container.style.visibility = 'visible';
@@ -192,11 +213,23 @@ function set_chart_size(chart_canvas) {
 
 // update an existing chart
 function update_chart() {
+    const total_projects = Object.keys(projects).length;
+    var finished_projects = 0;
     for (var project_name in projects) {
-        if (projects[project_name]['submission'] == -1) {
-            return;
+        if (projects[project_name]['submission'] != -1) {
+            ++finished_projects;
         }
     }
+
+    var progress_container = document.getElementById('marmostats-refresh-progress-container');
+    progress_percent = parseInt(finished_projects / total_projects * 100);
+
+    if (finished_projects < total_projects) {
+        progress_container.style.visibility = 'visible';
+        return;
+    }
+
+    progress_container.style.visibility = 'hidden';
 
     projects_displayed.sort();
     assign_chart.data.labels = projects_displayed;
@@ -394,10 +427,11 @@ function add_buttons() {
         }
     }
 
-    var refresh_button = document.createElement('button');
-    refresh_button.id = 'marmostats-refresh-button';
-    refresh_button.innerHTML = '<span>Refresh</span>';
-    container.appendChild(refresh_button);
+    var refresh_tag = document.createElement('div');
+    refresh_tag.style.display = 'inline-block';
+    refresh_tag.innerHTML = '<button id="marmostats-refresh-button"><span>Refresh</span></button> \
+                             <br /><div id="marmostats-refresh-progress-container"><div id="marmostats-refresh-progress-bar"></div></div>';
+    container.appendChild(refresh_tag);
 
     var loading_tag = document.createElement('img');
     loading_tag.id = 'marmostats-refresh-loading';
@@ -405,6 +439,7 @@ function add_buttons() {
     container.appendChild(loading_tag);
 
     var image_tag = document.createElement('img');
+    var refresh_button = document.getElementById('marmostats-refresh-button');
     image_tag.src = chrome.extension.getURL('icons/refresh.png');
     refresh_button.prepend(image_tag);
     refresh_button.onclick = function() {
@@ -549,6 +584,18 @@ function add_test_details(total_students) {
             }
             update_project_stats(project_name, rate_tag, score_tag, total_students);
         }
+    }
+
+    progress_percent = 0;
+    if (!load_finished) {
+        var bar_tag = document.getElementById('marmostats-progress-bar');
+        var text_tag = document.getElementById('marmostats-progress-perc');
+        bar_tag.style.width = 0;
+        update_progress_bar(0, bar_tag, text_tag);
+    } else {
+        var bar_tag = document.getElementById('marmostats-refresh-progress-bar');
+        bar_tag.style.width = 0;
+        update_progress_bar(0, bar_tag);
     }
 }
 
