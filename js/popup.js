@@ -60,6 +60,8 @@ function setup_title(title_id, table_id) {
 }
 
 $(document).ready(function() {
+    const manifest = chrome.runtime.getManifest();
+
     var homepage_button = document.getElementById('marmostats-homepage-toggle');
     var overview_button = document.getElementById('marmostats-overview-toggle');
     var testdetail_button = document.getElementById('marmostats-testdetail-toggle');
@@ -71,4 +73,7 @@ $(document).ready(function() {
     setup_toggle(type_button, 'chart_isbar', true);
 
     setup_title('marmostats-chart-title', 'marmostats-chart-table');
+
+    var version_tag = document.getElementById('marmostats-version');
+    version_tag.innerText = 'v' + manifest.version;
 });

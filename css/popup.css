@@ -85,3 +85,11 @@ span {
     transform: rotate(-90deg);
     -webkit-transform: rotate(-90deg);
 }
+
+#marmostats-version {
+    text-align: center;
+    float: right;
+    color: rgb(169, 169, 169);
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
