@@ -127,7 +127,7 @@ function parse_test_result(table, test_ind, col_ind) {
 
     for (row_ind = 2; row_ind < test_rows.length; ++row_ind) {
         const test_result = test_rows[row_ind].children[col_ind];
-        if (test_result != undefined && test_result.getAttribute('class') == 'passed') {
+        if (test_result != undefined && test_result.classList.contains('passed')) {
             ++total_passed;
         }
     }
@@ -184,7 +184,7 @@ function parse_result_table(result_table, chart_enabled) {
     var test_fullnames = new Array();
     var test_results = new Array();
 
-    for (i = 0; i < total_public_tests + total_secret_tests; ++i) {
+    for (var i = 0; i < total_public_tests + total_secret_tests; ++i) {
         var testname;
         if (i < total_public_tests) {
             testname = 'P' + i.toString();
@@ -192,7 +192,6 @@ function parse_result_table(result_table, chart_enabled) {
             testname = 'S' + (i - total_public_tests).toString();
         }
         var test_title_container = rows[1].children[i];
-        test_title_container.classList.add('marmostats-tooltip-container');
         const passed_ratio = parse_test_result(result_table, i, public_index + i);
         const test_title_tag = test_title_container.getElementsByTagName('a')[0];
         const test_fullname = test_title_tag.getAttribute('title');
@@ -205,6 +204,7 @@ function parse_result_table(result_table, chart_enabled) {
         add_tooltip(test_title_container, test_fullname);
     }
 
+    // draw chart for pass rates
     if (chart_enabled) {
         draw_chart(test_names, test_results);
     }
@@ -212,15 +212,17 @@ function parse_result_table(result_table, chart_enabled) {
 
 // add tooltip to the given element
 function add_tooltip(target, content) {
+    target.classList.add('marmostats-tooltip-container');
+
     var tooltip = document.createElement('span');
     tooltip.innerHTML = content;
     tooltip.classList.add('marmostats-tooltip');
 
     target.appendChild(tooltip);
-    target.addEventListener('mouseenter', function(e) {
+    target.addEventListener('mouseenter', function() {
         tooltip.style.visibility = 'visible';
     });
-    target.addEventListener('mouseleave', function(e) {
+    target.addEventListener('mouseleave', function() {
         tooltip.style.visibility = 'hidden';
     });
 
@@ -264,15 +266,22 @@ function set_page_styles() {
 
     // set background color for table contents
     var result_table = document.getElementById('marmostats-result-table');
-    var submission_ind = -1;
     var rows = result_table.getElementsByTagName('tr');
     const titles = rows[0].getElementsByTagName('th');
 
+    var submission_ind = -1;
+    var public_index = -1;
     for (var i = 0; i < titles.length; ++i) {
-        if (submission_ind == -1 && titles[i].textContent === 'submitted at') {
+        if (submission_ind == -1 && titles[i].textContent == 'submitted at') {
             submission_ind = i;
-            break;
         }
+        if (public_index == -1 && titles[i].textContent == 'Public') {
+            public_index = i;
+        }
+    }
+
+    if (submission_ind == -1 && public_index == -1) {
+        return;
     }
 
     for (var i = 2; i < rows.length; ++i) {
@@ -280,23 +289,47 @@ function set_page_styles() {
             continue;
         }
 
-        if (submission_ind != -1 && submission_ind < rows[i].children.length) {
-            var submission_cell = rows[i].children[submission_ind];
-            const year = new Date().getFullYear();
-            const submission_text = submission_cell.textContent.replace(/(\r\n|\n|\r)|\bat\b/gm, '');
-            const submission_time = Date.parse(submission_text + ' ' + year);
-            
-            if (submission_cell.getElementsByTagName('a')) {
-                submission_cell.children[0].innerText = submission_text;
-            }
+        var submission_cell = rows[i].children[submission_ind];
+        const year = new Date().getFullYear();
+        const submission_text = submission_cell.textContent.replace(/(\r\n|\n|\r)|\bat\b/gm, '');
+        const submission_time = Date.parse(submission_text + ' ' + year);
+        const submission_link = submission_cell.children[0].href;
 
-            if (!submission_time || !due_time) {
-                submission_cell.style.backgroundColor = 'rgba(255, 213, 0, 0.25)';
-            } else if (due_time < submission_time) {
-                submission_cell.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
-            } else {
-                submission_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
-            }
+        if (submission_cell.getElementsByTagName('a')) {
+            submission_cell.children[0].innerText = submission_text;
+        }
+
+        if (!submission_time || !due_time) {
+            submission_cell.style.backgroundColor = 'rgba(255, 213, 0, 0.25)';
+        } else if (due_time < submission_time) {
+            submission_cell.style.backgroundColor = 'rgba(255, 69, 0, 0.25)';
+        } else {
+            submission_cell.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
+        }
+
+        // add tooltip and event listener for each colored cell
+        for (var cell_ind = public_index; cell_ind < rows[i].children.length; ++cell_ind) {
+            var cell = rows[i].children[cell_ind];
+            cell.classList.add('marmostats-testdetail-container');
+
+            cell.addEventListener('click', function() {
+                if (!this.getElementsByTagName('span').length) {
+                    var tooltip = document.createElement('span');
+                    tooltip.innerText = submission_link;
+                    tooltip.classList.add('marmostats-testdetail-tooltip');
+                    this.appendChild(tooltip);
+                    tooltip.style.marginLeft = -tooltip.clientWidth / 2 + 'px';
+                } else {
+                    this.getElementsByTagName('span')[0].style.visibility = 'visible';
+                }
+            });
+
+            cell.addEventListener('mouseleave', function() {
+                var targets = this.getElementsByTagName('span');
+                if (targets.length) {
+                    targets[0].style.visibility = 'hidden';
+                }
+            });
         }
     }
 }
