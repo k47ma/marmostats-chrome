@@ -64,7 +64,9 @@ function update_student_scores(test_scores) {
 // draw a column chart about the test results under overview
 function draw_chart(test_scores) {
     var chart_canvas = document.createElement('canvas');
-    document.querySelector('div[id="marmostats-chart"]').appendChild(chart_canvas);
+    var chart_container = document.getElementById('marmostats-chart');
+    chart_container.innerHTML = '';
+    chart_container.appendChild(chart_canvas);
 
     const max_score = test_scores[test_scores.length - 1];
     var score_labels = new Array(max_score + 1);
@@ -275,7 +277,7 @@ function set_page_styles() {
         }
 
         // disabled due to performance issue
-        // update_table_links(submission_cell, submission_link);      
+        // update_table_links(submission_cell, submission_link);
     }
 }
 
@@ -320,7 +322,7 @@ function add_neighbor_links() {
             project_info.push({name: project_name, test_detail: test_detail_link, overview: overview_link});
         }
 
-        project_info.sort(function(a, b) { 
+        project_info.sort(function(a, b) {
             if (a.name < b.name) {
                 return -1;
             } else if (a.name > b.name) {

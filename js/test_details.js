@@ -69,7 +69,9 @@ function update_student_scores(test_scores) {
 // draw a column chart about the test results under overview
 function draw_chart(test_names, test_results) {
     var chart_canvas = document.createElement('canvas');
-    document.querySelector('div[id="marmostats-chart"]').appendChild(chart_canvas);
+    var chart_container = document.getElementById('marmostats-chart');
+    chart_container.innerHTML = '';
+    chart_container.appendChild(chart_canvas);
 
     var ctx = chart_canvas.getContext('2d');
     var chart = new Chart(ctx, {
@@ -308,6 +310,7 @@ function set_page_styles() {
         }
 
         // add tooltip and event listener for each colored cell
+        /*
         for (var cell_ind = public_index; cell_ind < rows[i].children.length; ++cell_ind) {
             var cell = rows[i].children[cell_ind];
             cell.classList.add('marmostats-testdetail-container');
@@ -331,6 +334,7 @@ function set_page_styles() {
                 }
             });
         }
+        */
     }
 }
 
@@ -375,7 +379,7 @@ function add_neighbor_links() {
             project_info.push({name: project_name, test_detail: test_detail_link, overview: overview_link});
         }
 
-        project_info.sort(function(a, b) { 
+        project_info.sort(function(a, b) {
             if (a.name < b.name) {
                 return -1;
             } else if (a.name > b.name) {
@@ -443,14 +447,14 @@ function display_stats() {
     result_table.parentElement.prepend(overview_tag);
 
     var list_tag = document.createElement('ul');
-    list_tag.className = "marmostats-list";
+    list_tag.className = 'marmostats-list';
     list_tag.innerHTML = '<li>Total Students: <b id="marmostats-total-students"></b></li>\
-                        <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
-                        <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>\
-                        <li>Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
-                            Median: <b class="marmostats-score" id="marmostats-score-median"></b> \
-                            Max: <b class="marmostats-score" id="marmostats-score-max"></b> \
-                            Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>';
+                          <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
+                          <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>\
+                          <li>Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
+                              Median: <b class="marmostats-score" id="marmostats-score-median"></b> \
+                              Max: <b class="marmostats-score" id="marmostats-score-max"></b> \
+                              Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>';
     document.querySelector('div[id="marmostats-test-summary"]').appendChild(list_tag);
 
     chrome.storage.local.get(['chart_testdetail'], function(result) {
