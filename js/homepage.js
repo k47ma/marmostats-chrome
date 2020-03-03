@@ -705,9 +705,10 @@ function display_stats(chart_enabled) {
     var project_table = document.getElementsByTagName('table')[0];
     project_table.classList.add('marmostats-overview-table');
 
+    var overview_tag = document.createElement('div');
+    overview_tag.id = 'marmostats-overview';
+    project_table.parentElement.prepend(overview_tag);
     if (chart_enabled) {
-        var overview_tag = document.createElement('div');
-        overview_tag.id = 'marmostats-overview';
         overview_tag.innerHTML = '<div id="marmostats-test-summary"> \
                                     <p>Total Students: <b id="marmostats-total-students"></b></p> \
                                 </div> \
@@ -721,7 +722,6 @@ function display_stats(chart_enabled) {
                                     <p id="marmostats-progress-perc"></p> \
                                 </div> \
                                 <div id="marmostats-chart"></div>';
-        project_table.parentElement.prepend(overview_tag);
 
         display_overview();
     }
@@ -750,6 +750,42 @@ function start() {
     });
 }
 
+// add header on scroll
+function add_table_header() {
+    const table = document.getElementsByClassName('marmostats-overview-table')[0];
+    if (!table) return;
+
+    const header_row = table.getElementsByTagName('tr')[0];
+    var header_copy = document.getElementById('marmostats-overview-header');
+    if (!header_copy) {
+        header_copy = header_row.cloneNode(true);
+        header_copy.id = 'marmostats-overview-header';
+        header_copy.style.visibility = 'collapse';
+        document.getElementById('marmostats-overview').appendChild(header_copy);
+    } else {
+        header_copy.innerHTML = header_row.innerHTML;
+    }
+
+    const header_rect = header_row.getBoundingClientRect();
+    if (header_rect.top < 0) {
+        header_copy.style.position = 'absolute';
+        header_copy.style.top = window.pageYOffset;
+        header_copy.style.left = header_rect.left + window.pageXOffset;
+        header_copy.style.visibility = 'visible';
+    } else {
+        header_copy.style.visibility = 'collapse';
+    }
+
+    for (var i = 0; i < header_row.children.length; ++i) {
+        var cell_copy = header_copy.children[i];
+        cell_copy.style.width = header_row.children[i].clientWidth;
+    }
+
+
+}
+
 $(document).ready(function() {
+    document.addEventListener('scroll', add_table_header);
+
     start();
 });
