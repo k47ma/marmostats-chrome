@@ -10,6 +10,20 @@ li {
     font-family: 'Times New Roman', Times, serif;
 }
 
+.marmostats-overview-title {
+    display: inline-block;
+    background-color: #ffcc33;
+    border: 0.5px solid black;
+    vertical-align: bottom;
+    text-align: center;
+    font-weight: bold;
+}
+
+.marmostats-overview-title p {
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+
 .marmostats-list {
     font-size: 17px;
     margin-left: 35px;
@@ -308,4 +322,9 @@ li {
 #marmostats-next-project {
     float: right;
     right: 0px;
+}
+
+#marmostats-overview-header {
+    padding: 3px;
+    overflow: hidden;
 }

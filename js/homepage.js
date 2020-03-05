@@ -758,12 +758,21 @@ function add_table_header() {
     const header_row = table.getElementsByTagName('tr')[0];
     var header_copy = document.getElementById('marmostats-overview-header');
     if (!header_copy) {
-        header_copy = header_row.cloneNode(true);
+        header_copy = document.createElement('div');
         header_copy.id = 'marmostats-overview-header';
-        header_copy.style.visibility = 'collapse';
         document.getElementById('marmostats-overview').appendChild(header_copy);
-    } else {
-        header_copy.innerHTML = header_row.innerHTML;
+        header_copy.style.visibility = 'collapse';
+    }
+
+    header_copy.innerHTML = '';
+    header_copy.style.width = header_row.clientWidth + header_row.children.length;
+    for (var header of header_row.children) {
+        var h_copy = document.createElement('span');
+        h_copy.classList.add('marmostats-overview-title');
+        var h_text = document.createElement('p');
+        h_text.innerText = header.innerText;
+        h_copy.appendChild(h_text);
+        header_copy.appendChild(h_copy);
     }
 
     const header_rect = header_row.getBoundingClientRect();
@@ -776,12 +785,15 @@ function add_table_header() {
         header_copy.style.visibility = 'collapse';
     }
 
-    for (var i = 0; i < header_row.children.length; ++i) {
+    var max_height = 0;
+    for (var i = 0; i < header_copy.children.length; ++i) {
         var cell_copy = header_copy.children[i];
         cell_copy.style.width = header_row.children[i].clientWidth;
+        max_height = max_height < cell_copy.clientHeight ? cell_copy.clientHeight : max_height;
     }
-
-
+    for (var cell_copy of header_copy.children) {
+        cell_copy.style.height = max_height;
+    }
 }
 
 $(document).ready(function() {
