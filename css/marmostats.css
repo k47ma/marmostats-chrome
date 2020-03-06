@@ -22,6 +22,8 @@ li {
 .marmostats-overview-title p {
     margin-block-start: 0px;
     margin-block-end: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .marmostats-list {

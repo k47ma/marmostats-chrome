@@ -751,8 +751,8 @@ function start() {
 }
 
 // add header on scroll
-function add_table_header() {
-    const table = document.getElementsByClassName('marmostats-overview-table')[0];
+function add_table_header(table_name) {
+    const table = document.getElementsByClassName(table_name)[0];
     if (!table) return;
 
     const header_row = table.getElementsByTagName('tr')[0];
@@ -776,9 +776,9 @@ function add_table_header() {
     }
 
     const header_rect = header_row.getBoundingClientRect();
-    if (header_rect.top < 0) {
+    if (header_rect.top < 0 && header_rect.top + table.clientHeight > 0) {
         header_copy.style.position = 'absolute';
-        header_copy.style.top = window.pageYOffset;
+        header_copy.style.top = window.pageYOffset - 5;
         header_copy.style.left = header_rect.left + window.pageXOffset;
         header_copy.style.visibility = 'visible';
     } else {
@@ -797,7 +797,9 @@ function add_table_header() {
 }
 
 $(document).ready(function() {
-    document.addEventListener('scroll', add_table_header);
+    document.addEventListener('scroll', function() {
+        add_table_header('marmostats-overview-table');
+    });
 
     start();
 });
