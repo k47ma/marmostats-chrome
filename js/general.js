@@ -60,6 +60,70 @@ function add_styles() {
     }
 }
 
+// add header on scroll
+function add_table_header(table) {
+    const rows = table.getElementsByTagName('tr')
+    const header_row = rows[0];
+    var header_copy = document.getElementById('marmostats-overview-header');
+    if (!header_copy) {
+        header_copy = document.createElement('div');
+        header_copy.id = 'marmostats-overview-header';
+        document.getElementById('marmostats-overview').appendChild(header_copy);
+        header_copy.style.visibility = 'collapse';
+    }
+
+    header_copy.innerHTML = '';
+    header_copy.style.width = header_row.clientWidth + header_row.children.length;
+    for (var header of header_row.children) {
+        var h_copy = document.createElement('span');
+        h_copy.classList.add('marmostats-overview-title');
+        var h_text = document.createElement('p');
+        h_text.innerText = header.innerText;
+        h_copy.appendChild(h_text);
+        header_copy.appendChild(h_copy);
+    }
+
+    const header_rect = header_row.getBoundingClientRect();
+    var area_height = 0;
+    for (const row of rows) {
+        if (row.children[0].hasAttribute('colspan')) {
+            continue;
+        }
+        area_height += row.clientHeight;
+    }
+
+    if (header_rect.top < 0 && header_rect.top + area_height > 0) {
+        header_copy.style.position = 'absolute';
+        header_copy.style.top = window.pageYOffset - 5;
+        header_copy.style.left = header_rect.left + window.pageXOffset - 1;
+        header_copy.style.visibility = 'visible';
+    } else {
+        header_copy.style.visibility = 'collapse';
+    }
+
+    var max_height = 0;
+    for (var i = 0; i < header_copy.children.length; ++i) {
+        var cell_copy = header_copy.children[i];
+        cell_copy.style.width = header_row.children[i].clientWidth;
+        max_height = max_height < cell_copy.clientHeight ? cell_copy.clientHeight : max_height;
+    }
+    for (var cell_copy of header_copy.children) {
+        cell_copy.style.height = max_height;
+    }
+}
+
 $(document).ready(function() {
+    document.addEventListener('scroll', function() {
+        table_classes = ['marmostats-overview-table',
+                         'marmostats-result-table',
+                         'marmostats-project-table'];
+        for (const class_name of table_classes) {
+            const table = document.getElementById(class_name);
+            if (table) {
+                add_table_header(table);
+            }
+        }
+    });
+
     add_styles();
 });

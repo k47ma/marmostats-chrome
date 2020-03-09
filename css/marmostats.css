@@ -2,14 +2,6 @@ li {
     padding: 3px;
 }
 
-.marmostats-overview-table {
-    border-spacing: 2px;
-}
-
-.marmostats-overview-table b {
-    font-family: 'Times New Roman', Times, serif;
-}
-
 .marmostats-overview-title {
     display: inline-block;
     background-color: #ffcc33;
@@ -116,6 +108,14 @@ li {
 
 .marmostats-right {
     float: right;
+}
+
+#marmostats-overview-table {
+    border-spacing: 2px;
+}
+
+#marmostats-overview-table b {
+    font-family: 'Times New Roman', Times, serif;
 }
 
 #marmostats-total-students {
