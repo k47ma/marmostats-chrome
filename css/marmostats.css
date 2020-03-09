@@ -329,4 +329,5 @@ li {
 #marmostats-overview-header {
     padding: 3px;
     overflow: hidden;
+    z-index: 1;
 }
