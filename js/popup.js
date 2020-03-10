@@ -40,13 +40,19 @@ function setup_title(title_id, table_id) {
             data[table_id] = true;
             chrome.storage.local.set(data);
         } else if (!result[table_id]) {
-            $('#' + table_id).hide();
+            document.getElementById(table_id).classList.add('hide');
             arrow.classList.add('marmostats-rotated');
         }
     });
 
     title.parentElement.addEventListener('click', function() {
-        $('#' + table_id).slideToggle(200);
+        var table = document.getElementById(table_id);
+        if (table.classList.contains('hide')) {
+            table.classList.remove('hide');
+        } else {
+            table.classList.add('hide');
+        }
+        //$('#' + table_id).slideToggle(200);
         var data = new Object();
         if (arrow.classList.contains('marmostats-rotated')) {
             data[table_id] = true;
