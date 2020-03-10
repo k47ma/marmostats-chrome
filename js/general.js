@@ -81,7 +81,6 @@ function add_table_header(table) {
         header_copy = document.createElement('div');
         header_copy.id = 'marmostats-overview-header';
         document.getElementById('marmostats-overview').appendChild(header_copy);
-        header_copy.style.visibility = 'collapse';
     }
 
     const header_row = header_rows[0];
@@ -169,8 +168,10 @@ function add_table_header(table) {
         header_copy.style.top = window.pageYOffset - 5;
         header_copy.style.left = header_rect.left + window.pageXOffset - 0.5;
         header_copy.style.visibility = 'visible';
+        header_copy.style.maxHeight = 100;
     } else {
         header_copy.style.visibility = 'collapse';
+        header_copy.style.maxHeight = 0;
     }
 }
 

@@ -1,3 +1,12 @@
+.marmostats-deadline-text {
+    font-size: 18px;
+}
+
+.marmostats-deadline-text span {
+    margin: 0px 5px;
+    padding: 0px 2px;
+}
+
 #marmostats-tabs {
     font-family: "Open Sans", Arial, "Lucida Grande", sans-serif;
     font-size: 16px;
@@ -32,11 +41,10 @@
     color: rgba(235, 100, 75, 1);
 }
 
-.marmostats-deadline-text {
-    font-size: 18px;
-}
-
-.marmostats-deadline-text span {
-    margin: 0px 5px;
-    padding: 0px 2px;
+#marmostats-overview-header {
+    padding: 3px;
+    overflow: hidden;
+    z-index: 1;
+    visibility: collapse;
+    max-height: 0px;
 }
