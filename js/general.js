@@ -71,7 +71,7 @@ function add_table_header(table) {
             break;
         }
     }
-    
+
     if (header_rows.length == 0) {
         return;
     }
@@ -98,7 +98,7 @@ function add_table_header(table) {
         h_copy.appendChild(h_text);
         header_copy.appendChild(h_copy);
         if (header.innerText == 'Public') {
-            sec_x_offset = header.getBoundingClientRect().left - header.clientWidth;
+            sec_x_offset = header.getBoundingClientRect().left - 52;
             total_public = header.getAttribute('colspan');
             sec_height = header.clientHeight;
         }
@@ -116,10 +116,10 @@ function add_table_header(table) {
             header_copy.appendChild(h_copy);
             h_copy.style.width = header.clientWidth;
             h_copy.style.height = header.clientHeight;
-            h_copy.style.left = sec_x_offset + window.pageXOffset - 1;
+            h_copy.style.left = sec_x_offset + window.pageXOffset - 1 - 0.25 * i;
             h_copy.style.top = - header.clientHeight - 1;
             if (i == total_public) {
-                h_copy.style.borderLeftWidth = '7px';
+                h_copy.style.borderLeftWidth = '6px';
             }
 
             if (h_copy.getElementsByClassName('marmostats-tooltip').length > 0) {
@@ -160,7 +160,7 @@ function add_table_header(table) {
         var cell_copy = header_copy.children[i];
         cell_copy.style.height = max_height;
         if (cell_copy.innerText == 'Secret') {
-            cell_copy.style.borderLeftWidth = '7px';
+            cell_copy.style.borderLeftWidth = '6px';
         }
     }
 
@@ -175,15 +175,19 @@ function add_table_header(table) {
 }
 
 $(document).ready(function() {
-    document.addEventListener('scroll', function() {
-        table_classes = ['marmostats-overview-table',
-                         'marmostats-result-table',
-                         'marmostats-project-table'];
-        for (const class_name of table_classes) {
-            const table = document.getElementById(class_name);
-            if (table) {
-                add_table_header(table);
-            }
+    chrome.storage.local.get(['table_header'], function(result) {
+        if (result.table_header) {
+            document.addEventListener('scroll', function() {
+                table_classes = ['marmostats-overview-table',
+                                 'marmostats-result-table',
+                                 'marmostats-project-table'];
+                for (const class_name of table_classes) {
+                    const table = document.getElementById(class_name);
+                    if (table) {
+                        add_table_header(table);
+                    }
+                }
+            });
         }
     });
 

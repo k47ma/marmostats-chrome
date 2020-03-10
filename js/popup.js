@@ -66,13 +66,16 @@ $(document).ready(function() {
     var overview_button = document.getElementById('marmostats-overview-toggle');
     var testdetail_button = document.getElementById('marmostats-testdetail-toggle');
     var type_button = document.getElementById('marmostats-type-toggle');
+    var header_button = document.getElementById('marmostats-tableheader-toggle');
 
     setup_toggle(homepage_button, 'chart_homepage', true);
     setup_toggle(overview_button, 'chart_overview', true);
     setup_toggle(testdetail_button, 'chart_testdetail', true);
     setup_toggle(type_button, 'chart_isbar', true);
+    setup_toggle(header_button, 'table_header', true);
 
     setup_title('marmostats-chart-title', 'marmostats-chart-table');
+    setup_title('marmostats-table-title', 'marmostats-table-table');
 
     var version_tag = document.getElementById('marmostats-version');
     version_tag.innerText = 'v' + manifest.version;
