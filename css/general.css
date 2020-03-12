@@ -43,7 +43,7 @@
 
 #marmostats-overview-header {
     padding: 3px;
-    overflow: hidden;
+    overflow: visible;
     z-index: 1;
     visibility: collapse;
     max-height: 0px;
