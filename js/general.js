@@ -115,7 +115,7 @@ function add_table_header(table) {
             header_copy.appendChild(h_copy);
             h_copy.style.width = header.clientWidth;
             h_copy.style.height = header.clientHeight;
-            h_copy.style.left = sec_x_offset + window.pageXOffset - 1 - 0.25 * i;
+            h_copy.style.left = sec_x_offset + window.pageXOffset - 1;
             h_copy.style.top = - header.clientHeight - 1;
             if (i == total_public) {
                 h_copy.style.borderLeftWidth = '6px';
