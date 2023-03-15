@@ -1,28 +1,15 @@
 /* Script for parsing project overview */
 
-const key = "97a591e399f591e64a5f4536d08d9574";
-
 // update the number of total students and students who have submitted
 function update_total_students(subject, catalog) {
+    var tables = document.getElementsByTagName('table');
     var result_table = document.getElementById('marmostats-project-table');
-    const termlist_url = "https://api.uwaterloo.ca/v2/terms/list.json?key="+key;
-    var total_students = 0;
+    var no_submit_table = tables[tables.length - 1];
     var total_submissions = result_table.getElementsByTagName('tr').length - 1;
+    var total_no_submit = no_submit_table.getElementsByTagName('tr').length - 1;
+    var total_students = total_submissions + total_no_submit;
 
-    $.get(termlist_url, function(termlist) {
-            const term = termlist.data.current_term.toString();
-            const enroll_url = "https://api.uwaterloo.ca/v2/terms/"+term+"/"+subject+"/"+catalog+"/schedule.json?key="+key;
-            $.get(enroll_url, function(enrollment) {
-                for (const section_info of enrollment.data) {
-                    if (section_info.section.startsWith('LEC')) {
-                        total_students += section_info.enrollment_total;
-                    }
-                }
-                $("#marmostats-total-students").html(total_students);
-                update_submission_rate(total_students, total_submissions);
-            });
-    });
-
+    $("#marmostats-total-students").html(total_students);
     $("#marmostats-total-submissions").html(total_submissions);
     update_submission_rate(total_students, total_submissions);
 }

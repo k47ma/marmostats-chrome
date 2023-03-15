@@ -10,7 +10,7 @@ const refresh_time = 5;
 // create a new loading image tag
 function make_loading_image() {
     var image_tag = document.createElement('img');
-    image_tag.src = chrome.extension.getURL('icons/loading.gif');
+    image_tag.src = chrome.runtime.getURL('icons/loading.gif');
     image_tag.style.width = '18px';
     image_tag.style.height = '18px';
     return image_tag;

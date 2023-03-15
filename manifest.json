@@ -2,8 +2,8 @@
     "name": "MarmoStats",
     "short_name": "MarmoStats",
     "description": "A Chrome Extension for visualizing Marmoset test results",
-    "version": "1.1.6",
-    "manifest_version": 2,
+    "version": "1.2.1",
+    "manifest_version": 3,
     "permissions": ["storage"],
     "content_scripts": [
       {
@@ -37,18 +37,12 @@
         "css": ["css/marmostats.css"]
       }
     ],
-    "web_accessible_resources": ["icons/loading.gif", "icons/refresh.png",
-                                 "icons/bar-chart.png", "icons/line-chart.png"],
-    "browser_action": {
-      "default_icon": {
-        "16": "icons/marmostats-16.png",
-        "32": "icons/marmostats-32.png",
-        "48": "icons/marmostats-48.png",
-        "64": "icons/marmostats-64.png",
-        "128": "icons/marmostats-128.png"
-      },
-      "default_popup": "html/popup.html"
-    },
+    "web_accessible_resources": [
+        {
+          "resources": ["icons/*"],
+          "matches": ["https://marmoset.student.cs.uwaterloo.ca/*"]
+        }
+    ],
     "icons": {
       "16": "icons/marmostats-16.png",
       "32": "icons/marmostats-32.png",

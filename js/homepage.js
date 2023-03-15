@@ -1,6 +1,5 @@
 /* Script for homepage information */
 
-const key = "97a591e399f591e64a5f4536d08d9574";
 const current_url = window.location.href;
 
 var assign_chart = null;
@@ -435,12 +434,12 @@ function add_buttons() {
 
     var loading_tag = document.createElement('img');
     loading_tag.id = 'marmostats-refresh-loading';
-    loading_tag.src = chrome.extension.getURL('icons/loading.gif');
+    loading_tag.src = chrome.runtime.getURL('icons/loading.gif');
     container.appendChild(loading_tag);
 
     var image_tag = document.createElement('img');
     var refresh_button = document.getElementById('marmostats-refresh-button');
-    image_tag.src = chrome.extension.getURL('icons/refresh.png');
+    image_tag.src = chrome.runtime.getURL('icons/refresh.png');
     refresh_button.prepend(image_tag);
     refresh_button.onclick = function() {
         loading_tag.style.visibility = 'visible';
@@ -489,22 +488,13 @@ function refresh_page(autorefresh) {
 
 // update the number of total students and students who have submitted
 function update_total_students(subject, catalog) {
-    const termlist_url = "https://api.uwaterloo.ca/v2/terms/list.json?key="+key;
-
-    $.get(termlist_url, function(termlist) {
-            const term = termlist.data.current_term.toString();
-            const enroll_url = "https://api.uwaterloo.ca/v2/terms/"+term+"/"+subject+"/"+catalog+"/schedule.json?key="+key;
-            $.get(enroll_url, function(enrollment) {
-                var total_students = 0;
-                for (const section_info of enrollment.data) {
-                    if (section_info.section.startsWith('LEC')) {
-                        total_students += section_info.enrollment_total;
-                    }
-                }
-                $("#marmostats-total-students").html(total_students);
-                add_test_details(total_students);
-            });
-    });
+    var tables = document.getElementsByTagName('table');
+    var student_table = tables[tables.length - 1];
+    var total_students = student_table.getElementsByClassName('r0').length + 
+                         student_table.getElementsByClassName('r1').length;
+    var count_tag = document.getElementById('marmostats-total-students');
+    count_tag.innerText = total_students;
+    add_test_details(total_students);
 }
 
 // display an overview above the overview table
@@ -561,7 +551,7 @@ function add_test_details(total_students) {
             rows[i].insertBefore(detail_tag, rows[i].children[3]);
 
             var image_tag_1 = document.createElement('img');
-            image_tag_1.src = chrome.extension.getURL('icons/loading.gif');
+            image_tag_1.src = chrome.runtime.getURL('icons/loading.gif');
             image_tag_1.style.width = '18px';
             image_tag_1.style.height = '18px';
             var image_tag_2 = image_tag_1.cloneNode(true);
@@ -570,7 +560,7 @@ function add_test_details(total_students) {
             var detail_link_tag = document.createElement('a');
             detail_link_tag.href = detail_link;
             var detail_image = document.createElement('img');
-            detail_image.src = chrome.extension.getURL('icons/bar-chart.png');
+            detail_image.src = chrome.runtime.getURL('icons/bar-chart.png');
             detail_image.title = 'View Test Details for ' + project_name;
             detail_image.style.width = '18px';
             detail_image.style.height = '18px';
@@ -690,7 +680,7 @@ function update_table_style(table) {
             var link_tag = overview_cell.getElementsByTagName('a')[0];
             link_tag.innerText = '';
             var image_tag = document.createElement('img');
-            image_tag.src = chrome.extension.getURL('icons/line-chart.png');
+            image_tag.src = chrome.runtime.getURL('icons/line-chart.png');
             image_tag.title = 'Overview for ' + project_name;
             image_tag.style.width = '18px';
             image_tag.style.height = '18px';
