@@ -149,7 +149,7 @@ function draw_chart() {
                 pointRadius: 3,
                 pointHoverBorderWidth: 5,
                 barPercentage: 0.7,
-                fill: false
+                fill: false,
             },
             {
                 label: 'Avg. Score',
@@ -168,14 +168,14 @@ function draw_chart() {
         },
         options: {
             scales: {
-                xAxes: [{
-                    scaleLabel: {
+                x: {
+                    title: {
                         display: true,
                         labelString: 'Project'
                     }
-                }],
-                yAxes: [{
-                    scaleLabel: {
+                },
+                y: {
+                    title: {
                         display: true,
                         labelString: '%'
                     },
@@ -183,7 +183,7 @@ function draw_chart() {
                         suggestedMin: 0,
                         suggestedMax: 100
                     }
-                }]
+                }
             },
             responsive: true,
             responsiveAnimationDuration: 100,

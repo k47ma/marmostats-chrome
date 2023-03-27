@@ -76,14 +76,14 @@ function draw_chart(test_names, test_results) {
 
         options: {
             scales: {
-                xAxes: [{
-                    scaleLabel: {
+                x: {
+                    title: {
                         display: true,
                         labelString: 'Test Case'
                     }
-                }],
-                yAxes: [{
-                    scaleLabel: {
+                },
+                y: {
+                    title: {
                         display: true,
                         labelString: '%'
                     },
@@ -91,7 +91,7 @@ function draw_chart(test_names, test_results) {
                         suggestedMin: 0,
                         suggestedMax: 100
                     }
-                }]
+                }
             }
         }
     });

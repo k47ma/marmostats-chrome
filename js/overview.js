@@ -87,8 +87,8 @@ function draw_chart(test_scores) {
 
         options: {
             scales: {
-                xAxes: [{
-                    scaleLabel: {
+                x: {
+                    title: {
                         display: true,
                         labelString: 'Score'
                     },
@@ -96,13 +96,13 @@ function draw_chart(test_scores) {
                         suggestedMin: 0,
                         suggestedMax: max_score
                     }
-                }],
-                yAxes: [{
-                    scaleLabel: {
+                },
+                yAxes: {
+                    title: {
                         display: true,
                         labelString: '#'
                     }
-                }]
+                }
             }
         }
     });
