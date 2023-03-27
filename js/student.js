@@ -80,8 +80,8 @@ function refresh_countdown(refresh_tag, time_left, callback) {
 function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
                               latest_result_tag, max_result_tag) {
     $.get(project_url, function(response) {
-        var doc = document.createElement('html');
-        doc.innerHTML = response;
+        const parser = new DOMParser();
+        var doc = parser.parseFromString(response, 'text/html');
         const submission_table = doc.getElementsByTagName('table')[0];
         const rows = submission_table.getElementsByTagName('tr');
 
@@ -106,11 +106,11 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             ++total_sub;
         }
 
-        total_sub_tag.innerHTML = total_sub;
+        total_sub_tag.setHTML(total_sub);
         if (total_sub == 0) {
-            latest_sub_tag.innerHTML = '-';
-            latest_result_tag.innerHTML = '-';
-            max_result_tag.innerHTML = '-';
+            latest_sub_tag.setHTML('-');
+            latest_result_tag.setHTML('-');
+            max_result_tag.setHTML('-');
         } else {
             const due_date = parse_due_date(doc);
             const test_completed = rows[2].children[result_ind].getElementsByTagName('a').length > 0;
@@ -124,7 +124,7 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             if (test_completed) {
                 latest_tag.href = latest_link;
             }
-            latest_sub_tag.innerHTML = '';
+            latest_sub_tag.setHTML('');
             latest_sub_tag.appendChild(latest_tag);
             if (latest_time < due_date) {
                 latest_sub_tag.style.backgroundColor = 'rgba(122, 235, 122, 0.25)';
@@ -139,7 +139,7 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             if (test_completed) {
                 latest_result_link.href = latest_link;
             }
-            latest_result_tag.innerHTML = '';
+            latest_result_tag.setHTML('');
             latest_result_tag.appendChild(latest_result_link);
             if (latest_result == 'not tested yet') {
                 latest_result_tag.style.backgroundColor = 'rgba(30, 144, 255, 0.25)';
@@ -172,7 +172,7 @@ function update_project_stats(project_url, total_sub_tag, latest_sub_tag,
             const max_result_link = document.createElement('a');
             max_result_link.innerText = remove_newlines(max_result);
             max_result_link.href = max_link;
-            max_result_tag.innerHTML = '';
+            max_result_tag.setHTML('');
             max_result_tag.appendChild(max_result_link);
 
             if (max_result == 'not tested yet') {
@@ -204,19 +204,19 @@ function display_results() {
     var rows = student_table.getElementsByTagName('tr');
 
     var total_sub_title = document.createElement('th');
-    total_sub_title.innerHTML = '#<br />subs';
+    total_sub_title.setHTML('#<br />subs');
     rows[0].insertBefore(total_sub_title, rows[0].children[total_sub_ind]);
 
     var latest_sub_title = document.createElement('th');
-    latest_sub_title.innerHTML = 'latest<br />submission';
+    latest_sub_title.setHTML('latest<br />submission');
     rows[0].insertBefore(latest_sub_title, rows[0].children[latest_sub_ind]);
 
     var latest_result_title = document.createElement('th');
-    latest_result_title.innerHTML = 'latest<br />result';
+    latest_result_title.setHTML('latest<br />result');
     rows[0].insertBefore(latest_result_title, rows[0].children[latest_result_ind]);
 
     var max_result_title = document.createElement('th');
-    max_result_title.innerHTML = 'max<br />result';
+    max_result_title.setHTML('max<br />result');
     rows[0].insertBefore(max_result_title, rows[0].children[max_result_ind]);
 
     for (var row_ind = 1; row_ind < rows.length; ++row_ind) {

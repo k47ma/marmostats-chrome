@@ -52,7 +52,7 @@ function update_student_scores(test_scores) {
 function draw_chart(test_scores) {
     var chart_canvas = document.createElement('canvas');
     var chart_container = document.getElementById('marmostats-chart');
-    chart_container.innerHTML = '';
+    chart_container.setHTML('');
     chart_container.appendChild(chart_canvas);
 
     const max_score = test_scores[test_scores.length - 1];
@@ -165,7 +165,7 @@ function parse_result_table(result_table, chart_enabled) {
 function update_table_links(target_cell, submission_url) {
     $.get(submission_url, function(response) {
         var doc = document.createElement('html');
-        doc.innerHTML = response;
+        doc.setHTML(response);
         const submission_table = doc.getElementsByTagName('table')[0];
         const rows = submission_table.getElementsByTagName('tr');
         const titles = rows[0].getElementsByTagName('th');
@@ -186,7 +186,7 @@ function update_table_links(target_cell, submission_url) {
             var link_tag = document.createElement('a');
             link_tag.href = latest_link;
             link_tag.innerText = target_cell.innerText;
-            target_cell.innerHTML = '';
+            target_cell.setHTML('');
             target_cell.appendChild(link_tag);
         }
     });
@@ -290,8 +290,8 @@ function add_neighbor_links() {
     if (!homepage_link) return;
 
     $.get(homepage_link, function(response) {
-        var doc = document.createElement('html');
-        doc.innerHTML = response;
+        const parser = new DOMParser();
+        var doc = parser.parseFromString(response, 'text/html');
         const result_table = doc.getElementsByTagName('table')[0];
         const rows = result_table.getElementsByTagName('tr');
 
@@ -371,18 +371,18 @@ function display_stats() {
     result_table.id = 'marmostats-project-table';
     var overview_tag = document.createElement('div');
     overview_tag.id = 'marmostats-overview';
-    overview_tag.innerHTML = '<div id="marmostats-test-summary"></div><div id="marmostats-chart"></div>';
+    overview_tag.setHTML('<div id="marmostats-test-summary"></div><div id="marmostats-chart"></div>');
     result_table.parentElement.prepend(overview_tag);
 
     var list_tag = document.createElement('ul');
     list_tag.className = "marmostats-list";
-    list_tag.innerHTML = '<li>Total Students: <b id="marmostats-total-students"></b></li>\
-                          <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
-                          <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>\
-                          <li>Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
-                              Median: <b class="marmostats-score" id="marmostats-score-median"></b> \
-                              Max: <b class="marmostats-score" id="marmostats-score-max"></b> \
-                              Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>';
+    list_tag.setHTML('<li>Total Students: <b id="marmostats-total-students"></b></li>\
+                    <li>Total Submitted: <b id="marmostats-total-submissions"></b></li>\
+                    <li>Submission Rate: <b id="marmostats-submission-rate"></b></li>\
+                    <li>Mean: <b class="marmostats-score" id="marmostats-score-mean"></b> \
+                        Median: <b class="marmostats-score" id="marmostats-score-median"></b> \
+                        Max: <b class="marmostats-score" id="marmostats-score-max"></b> \
+                        Min: <b class="marmostats-score" id="marmostats-score-min"></b></li>');
     document.querySelector('div[id="marmostats-test-summary"]').appendChild(list_tag);
 
     chrome.storage.local.get(['chart_overview'], function(result) {

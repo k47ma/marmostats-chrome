@@ -84,7 +84,7 @@ function add_table_header(table) {
     }
 
     const header_row = header_rows[0];
-    header_copy.innerHTML = '';
+    header_copy.setHTML('');
     header_copy.style.width = header_row.clientWidth + header_row.children.length;
     var sec_x_offset = 0;
     var total_public = 0;
@@ -93,7 +93,7 @@ function add_table_header(table) {
         var h_copy = document.createElement('span');
         h_copy.classList.add('marmostats-overview-title');
         var h_text = document.createElement('p');
-        h_text.innerHTML = header.innerHTML;
+        h_text.setHTML(header.innerHTML);
         h_copy.appendChild(h_text);
         header_copy.appendChild(h_copy);
         if (header.innerText == 'Public') {
@@ -111,7 +111,7 @@ function add_table_header(table) {
             var header = sec_header.children[i];
             var h_copy = document.createElement('span');
             h_copy.classList.add('marmostats-overview-title-sec');
-            h_copy.innerHTML = header.innerHTML;
+            h_copy.setHTML(header.innerHTML);
             header_copy.appendChild(h_copy);
             h_copy.style.width = header.clientWidth;
             h_copy.style.height = header.clientHeight;

@@ -22,8 +22,8 @@ function update_project_stats(project_name, rate_tag, score_tag, total_students)
     const project_url = "https://marmoset.student.cs.uwaterloo.ca/view/instructor/projectTestResults.jsp?projectPK="+project_id;
 
     $.get(project_url, function(response) {
-        var doc = document.createElement('html');
-        doc.innerHTML = response;
+        const parser = new DOMParser();
+        var doc = parser.parseFromString(response, 'text/html');
         const result_table = doc.getElementsByTagName('table')[0];
         const rows = result_table.getElementsByTagName('tr');
         const total_cols = result_table.getElementsByTagName('tr')[0].children.length;
@@ -56,7 +56,7 @@ function update_project_stats(project_name, rate_tag, score_tag, total_students)
         if (total_submissions == 0) {
             avg_score = '-';
         }
-        rate_tag.innerHTML = '<b>' + submission_rate + '%</b>' + '/' + '<b>' + avg_score + '%</b>';
+        rate_tag.setHTML('<b>' + submission_rate + '%</b>' + '/' + '<b>' + avg_score + '%</b>');
         if (max == undefined) {
             score_tag.innerText = '-';
         } else {
@@ -364,17 +364,19 @@ function add_buttons() {
 
     var autorefresh_container = document.createElement('div');
     autorefresh_container.id = 'marmostats-autorefresh-container';
-    autorefresh_container.innerHTML = '<p>Auto-refresh: </p>';
+    var autorefresh_p = document.createElement('p');
+    autorefresh_container.innerText = 'Auto-refresh: ';
+    autorefresh_container.appendChild(autorefresh_p);
     container.appendChild(autorefresh_container);
 
     var autorefresh_button = document.createElement('span');
     autorefresh_button.id = 'marmostats-autorefresh-button';
-    autorefresh_button.innerHTML = '<input type="checkbox" id="marmostats-toggle-button" class="cbx hidden"/> \
-                                    <label for="marmostats-toggle-button" class="lbl"></label><br /> \
-                                    <p>Interval: </p> \
-                                    <input id="marmostats-autorefresh-input" type="text" name="autorefresh-input" value="1"> \
-                                    <p>min</p> \
-                                    <div id="marmostats-autorefresh-progress"></div>';
+    autorefresh_button.setHTML('<input type="checkbox" id="marmostats-toggle-button" class="cbx hidden"/> \
+                                <label for="marmostats-toggle-button" class="lbl"></label><br /> \
+                                <p>Interval: </p> \
+                                <input id="marmostats-autorefresh-input" type="text" name="autorefresh-input" value="1"> \
+                                <p>min</p> \
+                                <div id="marmostats-autorefresh-progress"></div>');
     autorefresh_container.appendChild(autorefresh_button);
 
     var checkbox = document.getElementById('marmostats-toggle-button');
@@ -428,8 +430,9 @@ function add_buttons() {
 
     var refresh_tag = document.createElement('div');
     refresh_tag.id = 'marmostats-refresh-container';
-    refresh_tag.innerHTML = '<button id="marmostats-refresh-button"><span>Refresh</span></button> \
-                             <br /><div id="marmostats-refresh-progress-container"><div id="marmostats-refresh-progress-bar"></div></div>';
+    refresh_tag.setHTML('<button id="marmostats-refresh-button"><span>Refresh</span></button> \
+                         <br /><div id="marmostats-refresh-progress-container"> \
+                         <div id="marmostats-refresh-progress-bar"></div></div>');
     container.appendChild(refresh_tag);
 
     var loading_tag = document.createElement('img');
@@ -472,7 +475,7 @@ function refresh_page(autorefresh) {
 
     $.get(current_url, function(response) {
         var doc = document.createElement('html');
-        doc.innerHTML = response;
+        doc.setHTML(response);
 
         var result_table = doc.getElementsByTagName('table')[0];
         result_table.id = 'marmostats-overview-table';
@@ -522,15 +525,15 @@ function add_test_details(total_students) {
     var rows = project_table.getElementsByTagName('tr');
 
     var title_rate_tag = document.createElement('th');
-    title_rate_tag.innerHTML = "Submission<br />/Avg. Score";
+    title_rate_tag.setHTML("Submission<br />/Avg. Score");
     rows[0].insertBefore(title_rate_tag, rows[0].children[1]);
 
     var title_score_tag = document.createElement('th');
-    title_score_tag.innerHTML = "Max<br />Score";
+    title_score_tag.setHTML("Max<br />Score");
     rows[0].insertBefore(title_score_tag, rows[0].children[2]);
 
     var title_detail_tag = document.createElement('th');
-    title_detail_tag.innerHTML = "Test<br />Details";
+    title_detail_tag.setHTML("Test<br />Details");
     rows[0].insertBefore(title_detail_tag, rows[0].children[3]);
 
     for (var i = 1; i < rows.length; ++i) {
@@ -699,7 +702,7 @@ function display_stats(chart_enabled) {
     overview_tag.id = 'marmostats-overview';
     project_table.parentElement.prepend(overview_tag);
     if (chart_enabled) {
-        overview_tag.innerHTML = '<div id="marmostats-test-summary"> \
+        overview_tag.setHTML('<div id="marmostats-test-summary"> \
                                     <p>Total Students: <b id="marmostats-total-students"></b></p> \
                                 </div> \
                                 <div id="marmostats-selector-container"> \
@@ -711,7 +714,7 @@ function display_stats(chart_enabled) {
                                     <div id="marmostats-progress-bar-background"><div id="marmostats-progress-bar"></div></div> \
                                     <p id="marmostats-progress-perc"></p> \
                                 </div> \
-                                <div id="marmostats-chart"></div>';
+                                <div id="marmostats-chart"></div>');
 
         display_overview();
     }

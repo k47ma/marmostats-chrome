@@ -13,12 +13,12 @@ function remove_newlines(s) {
 // refresh the submission table and check not tested again
 function refresh_table() {
     $.get(current_url, function(response) {
-        var doc = document.createElement('html');
-        doc.innerHTML = response;
+        const parser = new DOMParser();
+        var doc = parser.parseFromString(response, 'text/html');
         const new_table = doc.getElementsByTagName('table')[0];
 
         var submission_table = document.getElementById('marmostats-submission-table');
-        submission_table.innerHTML = new_table.innerHTML;
+        submission_table.setHTML(new_table.innerHTML);
 
         check_not_tested();
     });
@@ -42,7 +42,7 @@ function refresh_countdown(refresh_tags, time_left) {
 // add tooltip to the given element
 function add_tooltip(target, content) {
     var tooltip = document.createElement('span');
-    tooltip.innerHTML = content;
+    tooltip.setHTML(content);
     tooltip.classList.add('marmostats-tooltip');
 
     target.appendChild(tooltip);
